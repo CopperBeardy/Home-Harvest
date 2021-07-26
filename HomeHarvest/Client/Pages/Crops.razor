@@ -1,0 +1,41 @@
+﻿@page "/crops"
+<h3>Crops</h3>
+    <DxStackLayout>    
+    <Items>
+        <DxStackLayoutItem>
+            <Template>
+                <DxListBox Data="@Crop" @bind-Values="@Values" SelectionMode="ListBoxSelectionMode.Single" >
+                    <DxListEditorColumn FieldName="Year" Caption="Crop year" />
+                 </DxListBox>
+                 <p class="demo-text cw-400 mt-2 text-muted">
+                     Selected item: <b>@Values.FirstOrDefault()?.Year</b>
+                     </p>           
+            </Template>
+        </DxStackLayoutItem>
+         <DxStackLayoutItem>
+            <Template>
+               <img src="" />       
+            </Template>
+        </DxStackLayoutItem>
+    </Items>
+    </DxStackLayout>
+
+
+@code {
+
+    protected override Task OnInitializedAsync()
+    {
+        Values = Crop.Take(1);
+        return base.OnInitializedAsync();
+    }
+    public IEnumerable<CropDto> Crop = new List<CropDto>()
+    {
+
+        new CropDto(){  Id=1 , Year= 2021},
+        new CropDto(){  Id=1 , Year= 2020 },
+        new CropDto(){  Id=1 , Year= 2019 },
+    };
+
+    IEnumerable<CropDto> Values { get; set; }
+
+}

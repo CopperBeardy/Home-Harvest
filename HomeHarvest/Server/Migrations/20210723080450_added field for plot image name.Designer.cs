@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeHarvest.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210720173041_removed Harvest on from Sow")]
-    partial class removedHarvestonfromSow
+    [Migration("20210723080450_added field for plot image name")]
+    partial class addedfieldforplotimagename
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,9 @@ namespace HomeHarvest.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Plot")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()

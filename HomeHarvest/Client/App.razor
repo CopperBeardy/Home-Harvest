@@ -1,4 +1,4 @@
-<MatThemeProvider Theme=@theme>
+
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
@@ -23,11 +23,3 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
-</MatThemeProvider>
-@code{ 
-      MatTheme theme = new MatTheme()
-    {
-        Primary = "#2e7d32",
-        Secondary = "#26c6da"
-    };
-}

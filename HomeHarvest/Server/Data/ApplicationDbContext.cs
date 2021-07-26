@@ -1,6 +1,5 @@
 ﻿using HomeHarvest.Server.Entities;
 using HomeHarvest.Server.Models;
-using HomeHarvest.Shared.Enums;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;

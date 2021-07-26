@@ -9,6 +9,8 @@ using HomeHarvest.Server.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using HomeHarvest.Server.Entities;
+using HomeHarvest.Shared.Dtos;
+using AutoMapper;
 
 namespace HomeHarvest.Server.Controllers
 {
@@ -19,11 +21,13 @@ namespace HomeHarvest.Server.Controllers
     {
         private readonly ApplicationDbContext _context;
 		private readonly ILogger<CropController> _logger;
+		private readonly IMapper _mapper;
 
-		public CropController(ApplicationDbContext context, ILogger<CropController> logger)
+		public CropController(ApplicationDbContext context, ILogger<CropController> logger, IMapper mapper)
         {
             _context = context;
 			_logger = logger;
+			_mapper = mapper;
 		}
 
         // GET: api/Crop
@@ -34,54 +38,57 @@ namespace HomeHarvest.Server.Controllers
 
         // GET: api/Crop/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Crop>> GetCrop(int id)
+        public async Task<ActionResult<CropDto>> GetCrop(int id)
         {
             if (CropExists(id))
             {               
-                return await _context.Crops
+                var crop =  await _context.Crops
                     .Include(s => s.Sowed)
                     .FirstOrDefaultAsync(x => x.Id.Equals(id));
+                return _mapper.Map<CropDto>(crop);
             } else
             {
                 return NotFound();
             }
         }
 
-        //// PUT: api/Crop/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutCrop(int id, Crop crop)
-        //{
-        //    if (id != crop.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+		//// PUT: api/Crop/5
+		//// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutCrop(int id, CropDto cropDto)
+		{
+            var crop = _mapper.Map<Crop>(cropDto);  
+			if (id != crop.Id)
+			{
+				return BadRequest();
+			}
+            
+			_context.Entry(crop).State = EntityState.Modified;
 
-        //    _context.Entry(crop).State = EntityState.Modified;
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!CropExists(id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!CropExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+			return NoContent();
+		}
 
-        //    return NoContent();
-        //}
-
-        // POST: api/Crop
-      [HttpPost]
-        public async Task<ActionResult<Crop>> PostCrop(Crop crop)
+		// POST: api/Crop
+		[HttpPost]
+        public async Task<ActionResult<Crop>> PostCrop(CropDto cropDto)
         {
+            var crop = _mapper.Map<Crop>(cropDto);
             _context.Crops.Add(crop);
             await _context.SaveChangesAsync();
             _logger.LogInformation($"New Crop item with Id {crop.Id} has been added to the Db ");

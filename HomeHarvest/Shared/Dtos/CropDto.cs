@@ -1,5 +1,4 @@
-﻿using HomeHarvest.Shared.Dtos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeHarvest.Shared
+namespace HomeHarvest.Shared.Dtos
 {
 	public class CropDto
 	{
@@ -17,8 +16,14 @@ namespace HomeHarvest.Shared
 		/// <summary>
 		/// Year in which the crop was planted in
 		/// </summary>
-		[Required(ErrorMessage ="You must enter a year for the crop being sowed")]
+		[Required(ErrorMessage = "You must enter a year for the crop being sowed")]
 		public int Year { get; set; }
+
+		/// <summary>
+		/// Image name of the plot for the current crop
+		/// </summary>
+		public string Plot { get; set; }
+
 
 		/// <summary>
 		/// Collection of plants that were planted in the crop year

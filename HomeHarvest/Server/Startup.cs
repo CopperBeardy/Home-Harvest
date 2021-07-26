@@ -3,12 +3,15 @@ using HomeHarvest.Server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 using System.Linq;
 
 namespace HomeHarvest.Server
@@ -29,10 +32,17 @@ namespace HomeHarvest.Server
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
-		
 
+			services.AddCors(policy =>
+			{
+				policy.AddPolicy("CorsPolicy", opt => opt
+				.AllowAnyOrigin()
+				.AllowAnyHeader()
+				.AllowAnyMethod()
+				.WithExposedHeaders("X-Pagination"));
+			});
 
-
+			services.AddAutoMapper(typeof(Startup));
 			services.AddDatabaseDeveloperPageExceptionFilter();
 
 			services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -66,7 +76,13 @@ namespace HomeHarvest.Server
 
 			app.UseHttpsRedirection();
 			app.UseBlazorFrameworkFiles();
+			app.UseCors("CorsPolicy");
 			app.UseStaticFiles();
+			app.UseStaticFiles(new StaticFileOptions()
+			{
+				FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"StaticFiles")),
+				RequestPath = new PathString("/StaticFiles")
+			});
 
 			app.UseRouting();
 

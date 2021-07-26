@@ -1,4 +1,5 @@
-using MatBlazor;
+
+using HomeHarvest.Client.HttpRepository;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,12 +22,12 @@ namespace HomeHarvest.Client
 
 			builder.Services.AddHttpClient("HomeHarvest.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
 				.AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
-
+		
 			// Supply HttpClient instances that include access tokens when making requests to the server project
 			builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("HomeHarvest.ServerAPI"));
-		
+			builder.Services.AddDevExpressBlazor();
 			builder.Services.AddApiAuthorization();
-
+			builder.Services.AddScoped<ICropHttpRepository, CropHttpRepository>();
 			await builder.Build().RunAsync();
 		}
 	}

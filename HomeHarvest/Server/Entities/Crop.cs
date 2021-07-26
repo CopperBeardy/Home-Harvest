@@ -20,6 +20,10 @@ namespace HomeHarvest.Server.Entities
 		public int Year { get; set; }
 
 		/// <summary>
+		/// Image name of the plot for the current crop
+		/// </summary>
+		public string  Plot { get; set; }
+		/// <summary>
 		/// Collection of plants that were planted in the crop year
 		/// </summary>
 		public virtual ICollection<Sow> Sowed { get; set; }
