@@ -1,5 +1,4 @@
-
-using HomeHarvest.Client.HttpRepository;
+using HomeHarvest.Client.HttpRepositories;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +26,7 @@ namespace HomeHarvest.Client
 			builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("HomeHarvest.ServerAPI"));
 			builder.Services.AddDevExpressBlazor();
 			builder.Services.AddApiAuthorization();
-			builder.Services.AddScoped<ICropHttpRepository, CropHttpRepository>();
+			builder.Services.AddScoped<ICropRepository, CropRepository>();
 			await builder.Build().RunAsync();
 		}
 	}

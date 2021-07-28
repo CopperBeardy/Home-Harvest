@@ -1,20 +1,32 @@
 ﻿@page "/crops"
 <h3>Crops</h3>
-    <DxStackLayout>    
+    <DxStackLayout CssClass="w-100 ch-480">    
     <Items>
-        <DxStackLayoutItem>
+        <DxStackLayoutItem >
             <Template>
-                <DxListBox Data="@Crop" @bind-Values="@Values" SelectionMode="ListBoxSelectionMode.Single" >
-                    <DxListEditorColumn FieldName="Year" Caption="Crop year" />
+                <DxButton Text="Add Crop" Click="@HandleNewCrop"/>
+                
+                <DxListBox Data="@CropDtos"
+                                    @bind-Values="@Values"                                     
+                                    SelectionMode="ListBoxSelectionMode.Single"
+                                    ListRenderMode="ListRenderMode.Virtual" 
+                                    style="min-height:200px;">
+                    <DxListEditorColumn FieldName="LocationYear" Caption="Crop year" />
                  </DxListBox>
                  <p class="demo-text cw-400 mt-2 text-muted">
-                     Selected item: <b>@Values.FirstOrDefault()?.Year</b>
+                     Selected item: <b>@Values.FirstOrDefault()?.LocationYear</b>
                      </p>           
             </Template>
         </DxStackLayoutItem>
-         <DxStackLayoutItem>
+         <DxStackLayoutItem Length="2fr">
             <Template>
-               <img src="" />       
+                @if (IsAddVisible)
+                {
+                    <AddCrop  onAdd="@ToggleAddVisible" />
+                }else
+                  {
+                         <img src="@Values.FirstOrDefault()?.PlotImage" />  
+                }
             </Template>
         </DxStackLayoutItem>
     </Items>
@@ -22,20 +34,37 @@
 
 
 @code {
+    IEnumerable<CropDto> Values { get; set; }
+
+    [Parameter]
+    public IEnumerable<CropDto> CropDtos { get; set; } = new List<CropDto>();
+    [Inject]
+    public ICropRepository CropRepository { get; set;}
+
+    [Parameter]
+    public bool IsAddVisible { get; set; } = false;
 
     protected override Task OnInitializedAsync()
     {
-        Values = Crop.Take(1);
+       _ =  LoadCrops();
+       Values = CropDtos.Take(1);
+     
         return base.OnInitializedAsync();
     }
-    public IEnumerable<CropDto> Crop = new List<CropDto>()
+
+    public async Task LoadCrops()
     {
+        CropDtos = await CropRepository.GetAll();
+        await InvokeAsync(StateHasChanged);
+    }
 
-        new CropDto(){  Id=1 , Year= 2021},
-        new CropDto(){  Id=1 , Year= 2020 },
-        new CropDto(){  Id=1 , Year= 2019 },
-    };
-
-    IEnumerable<CropDto> Values { get; set; }
-
+    public async Task HandleNewCrop()
+    {
+        IsAddVisible = true;
+    }
+    public async Task ToggleAddVisible(bool visible)
+    {
+         IsAddVisible = visible;
+        await LoadCrops();    
+    }
 }

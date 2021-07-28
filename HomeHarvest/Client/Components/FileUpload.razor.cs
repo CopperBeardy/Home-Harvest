@@ -1,4 +1,4 @@
-using HomeHarvest.Client.HttpRepository;
+using HomeHarvest.Client.HttpRepositories;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
@@ -17,13 +17,11 @@ namespace HomeHarvest.Client.Components
         public EventCallback<string> OnChange { get; set; }
 
         [Inject]
-        public ICropHttpRepository Repository { get; set; }
+        public ICropRepository Repository { get; set; }
 
         private async Task HandleSelected(InputFileChangeEventArgs e)
         {
-            var imageFiles = e.GetMultipleFiles();
-            foreach (var imageFile in imageFiles)
-            {
+            var imageFile = e.File;            
                 if (imageFile != null)
                 {
                     var resizedFile = await imageFile.RequestImageFileAsync("image/png", 300, 500);
@@ -33,10 +31,9 @@ namespace HomeHarvest.Client.Components
                         content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
                         content.Add(new StreamContent(ms, Convert.ToInt32(resizedFile.Size)), "image", imageFile.Name);
                         ImgUrl = await Repository.UploadPlotImage(content);
-                        await OnChange.InvokeAsync(ImgUrl);
+                        await OnChange.InvokeAsync(imageFile.Name);
                     }
-                }
-            }
+                }            
         }
     }
 }
