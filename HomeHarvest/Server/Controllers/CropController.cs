@@ -32,8 +32,8 @@ namespace HomeHarvest.Server.Controllers
 
         // GET: api/Crop
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Crop>>> GetCrops() => 
-            await _context.Crops.ToListAsync();
+        public async Task<ActionResult<List<CropDto>>> GetCrops() =>        
+             _mapper.Map<List<CropDto>>(   await _context.Crops.ToListAsync());
         
 
         // GET: api/Crop/5
@@ -86,13 +86,21 @@ namespace HomeHarvest.Server.Controllers
 
 		// POST: api/Crop
 		[HttpPost]
-        public async Task<ActionResult<Crop>> PostCrop(CropDto cropDto)
+        public async Task<bool> PostCrop(CropDto cropDto)
         {
             var crop = _mapper.Map<Crop>(cropDto);
-            _context.Crops.Add(crop);
-            await _context.SaveChangesAsync();
-            _logger.LogInformation($"New Crop item with Id {crop.Id} has been added to the Db ");
-            return CreatedAtAction("GetCrop", new { id = crop.Id }, crop);
+			try
+			{
+                _context.Crops.Add(crop);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"New Crop item with Id {crop.Id} has been added to the Db ");
+                return true;
+			}
+			catch (Exception ex)
+			{
+                _logger.LogError($"Exception occured try to add {crop.Location},{crop.Year} to dataase: {ex}");
+		         }
+            return false;
         }
 
         // DELETE: api/Crop/5

@@ -1,4 +1,4 @@
-using HomeHarvest.Client.HttpRepository;
+using HomeHarvest.Client.HttpRepositories;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
@@ -12,31 +12,21 @@ namespace HomeHarvest.Client.Components
     {
         [Parameter]
         public string ImgUrl { get; set; }
-
         [Parameter]
         public EventCallback<string> OnChange { get; set; }
-
         [Inject]
-        public ICropHttpRepository Repository { get; set; }
+        public ICropRepository Repository { get; set; }
 
-        private async Task HandleSelected(InputFileChangeEventArgs e)
+		private async Task HandleSelected(InputFileChangeEventArgs e)
         {
-            var imageFiles = e.GetMultipleFiles();
-            foreach (var imageFile in imageFiles)
-            {
-                if (imageFile != null)
-                {
-                    var resizedFile = await imageFile.RequestImageFileAsync("image/png", 300, 500);
-                    using (var ms = resizedFile.OpenReadStream(resizedFile.Size))
-                    {
-                        var content = new MultipartFormDataContent();
-                        content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
-                        content.Add(new StreamContent(ms, Convert.ToInt32(resizedFile.Size)), "image", imageFile.Name);
-                        ImgUrl = await Repository.UploadPlotImage(content);
-                        await OnChange.InvokeAsync(ImgUrl);
-                    }
-                }
-            }
-        }
+            var imageFile = e.File;
+			using (var ms = imageFile.OpenReadStream(imageFile.Size))
+			{
+				var content = new MultipartFormDataContent();	
+				content.Add(new StreamContent(ms, Convert.ToInt32(imageFile.Size)), "image", imageFile.Name);
+				ImgUrl = await Repository.UploadPlotImage(content);
+			}
+			await OnChange.InvokeAsync(imageFile.Name);
+		}
     }
 }
