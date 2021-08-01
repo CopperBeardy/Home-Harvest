@@ -68,7 +68,7 @@ namespace HomeHarvest.Server.Controllers
 		//              ExpiresOn = DateTime.UtcNow.AddMinutes(1)
 		//          };
 		//          token.SetPermissions(BlobAccountSasPermissions.Read);
-		//          var stoken = token.ToSasQueryParameters(new Azure.Storage.StorageSharedKeyCredential("homeharveststorage", "zPuFS38sW7gv8WAgSPoLbn/zWdJML2Wi+LIPDS3T8rRJocGLHUA7Ukc1/LOs8iv8g5wolBahZvw6o+5YId4ATw=="));
+		//          var stoken = token.ToSasQueryParameters(new Azure.Storage.StorageSharedKeyCredential("homeharveststorage", ));
 		//          var container = new BlobContainerClient(_azureConnectionString, "upload-container");
 		//          var client =   container.GetBlobClient(name);
 		//          return Ok( client.Uri.ToString() + "?" + stoken);
