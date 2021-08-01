@@ -8,6 +8,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace HomeHarvest.Client.HttpRepositories
 {
@@ -24,7 +25,7 @@ namespace HomeHarvest.Client.HttpRepositories
 
 		public async Task<string> UploadPlotImage(MultipartFormDataContent content)
 		{
-			var postResult = await _httpClient.PostAsync("api/upload", content);
+			var postResult = await _httpClient.PostAsync("api/file", content);
 			var postContent = await postResult.Content.ReadAsStringAsync();
 			if (!postResult.IsSuccessStatusCode)
 			{
@@ -32,7 +33,7 @@ namespace HomeHarvest.Client.HttpRepositories
 			}
 			else
 			{
-				return "Success";
+				return postContent;
 			}
 		}
 		public async Task<List<CropDto>> GetAll()
@@ -41,12 +42,13 @@ namespace HomeHarvest.Client.HttpRepositories
 		
 			return result;
 		}
-		public async Task<File> DownloadPlotImage(string name)
+
+		public async Task<string> DownloadPlotImage(string name)
 		{
-			var result = await _httpClient.GetStreamAsync($"api/download/{name}");
-			//Todo return image from the hosted server
-			throw new NotImplementedException();
+
+			return $"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
 		}
+
 
 		public async Task<bool> Create(CropDto crop)
 		{

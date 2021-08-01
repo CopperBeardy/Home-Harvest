@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System.IO;
 using System.Linq;
 
@@ -33,6 +34,16 @@ namespace HomeHarvest.Server
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
 
+			//// Set up IOptions and populate AzureStorageConfig from configuration
+			//services.AddOptions();
+			//services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
+
+			//// Wire up a single instance of BlobStorage, calling Initialize() when we first use it.
+			//services.AddSingleton<IStorage>(serviceProvider => {
+			//	var blobStorage = new BlobStorage(serviceProvider.GetService<IOptions<AzureStorageConfig>>());
+			//	blobStorage.Initialize().GetAwaiter().GetResult();
+			//	return blobStorage;
+			//});
 			services.AddCors(policy =>
 			{
 				policy.AddPolicy("CorsPolicy", opt => opt
@@ -78,11 +89,11 @@ namespace HomeHarvest.Server
 			app.UseBlazorFrameworkFiles();
 			app.UseCors("CorsPolicy");
 			app.UseStaticFiles();
-			app.UseStaticFiles(new StaticFileOptions()
-			{
-				FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"StaticFiles")),
-				RequestPath = new PathString("/StaticFiles")
-			});
+			//app.UseStaticFiles(new StaticFileOptions()
+			//{
+			//	FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"StaticFiles")),
+			//	RequestPath = new PathString("/StaticFiles")
+			//});
 
 			app.UseRouting();
 

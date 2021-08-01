@@ -10,6 +10,7 @@
                                     @bind-Values="@Values"                                     
                                     SelectionMode="ListBoxSelectionMode.Single"
                                     ListRenderMode="ListRenderMode.Virtual" 
+                                    SelectedItemsChanged="@((IEnumerable<CropDto> values ) => SelectedItemChanged(values) )"
                                     style="min-height:200px;">
                     <DxListEditorColumn FieldName="LocationYear" Caption="Crop year" />
                  </DxListBox>
@@ -25,7 +26,7 @@
                     <AddCrop  onAdd="@ToggleAddVisible" />
                 }else
                   {
-                         <img src="@Values.FirstOrDefault()?.PlotImage" />  
+                         <img src="@Img"  />  
                 }
             </Template>
         </DxStackLayoutItem>
@@ -35,7 +36,7 @@
 
 @code {
     IEnumerable<CropDto> Values { get; set; }
-
+    public string Img { get; set; }
     [Parameter]
     public IEnumerable<CropDto> CropDtos { get; set; } = new List<CropDto>();
     [Inject]
@@ -66,5 +67,12 @@
     {
          IsAddVisible = visible;
         await LoadCrops();    
+    }
+
+    public async Task SelectedItemChanged(IEnumerable<CropDto> crops)
+    {
+        Img = await CropRepository.DownloadPlotImage(crops.First().PlotImage);
+     
+       
     }
 }

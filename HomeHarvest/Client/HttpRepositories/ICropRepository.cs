@@ -10,8 +10,8 @@ namespace HomeHarvest.Client.HttpRepositories
 		Task<List<CropDto>> GetAll();
 		Task<bool> Create(CropDto crop);
 		Task<string> Delete(CropDto crop);
-		Task<string> DownloadPlotImage(int cropId);
-		Task<string> Update(CropDto crop);
+	Task<string> Update(CropDto crop);
+		Task<string> DownloadPlotImage(string name);
 		Task<string> UploadPlotImage(MultipartFormDataContent content);
 	}
 }
