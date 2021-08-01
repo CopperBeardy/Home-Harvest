@@ -1,8 +1,10 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using HomeHarvest.Server.Helpers;
+using HomeHarvest.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
@@ -17,9 +19,9 @@ namespace HomeHarvest.Server.Controllers
     {
         private readonly string _azureConnectionString;
         private readonly string _azureContainerName;
-        public FileController(IConfiguration config)
+        public FileController(IOptions<BlobContainerConnection> conString )
         {
-            _azureConnectionString = config.GetConnectionString("BlobStorageConnection");
+            _azureConnectionString = conString.Value.ConnectionString.ToString();
             _azureContainerName = "upload-container";
         }
 
