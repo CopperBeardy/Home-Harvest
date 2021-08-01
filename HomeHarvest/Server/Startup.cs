@@ -34,16 +34,7 @@ namespace HomeHarvest.Server
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
 
-			//// Set up IOptions and populate AzureStorageConfig from configuration
-			//services.AddOptions();
-			//services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
-
-			//// Wire up a single instance of BlobStorage, calling Initialize() when we first use it.
-			//services.AddSingleton<IStorage>(serviceProvider => {
-			//	var blobStorage = new BlobStorage(serviceProvider.GetService<IOptions<AzureStorageConfig>>());
-			//	blobStorage.Initialize().GetAwaiter().GetResult();
-			//	return blobStorage;
-			//});
+	
 			services.AddCors(policy =>
 			{
 				policy.AddPolicy("CorsPolicy", opt => opt
@@ -52,10 +43,10 @@ namespace HomeHarvest.Server
 				.AllowAnyMethod()
 				.WithExposedHeaders("X-Pagination"));
 			});
-
+			services.Configure<BlobContainerConnection>(Configuration.GetSection("BlobContainerConnection"));
 			services.AddAutoMapper(typeof(Startup));
 			services.AddDatabaseDeveloperPageExceptionFilter();
-
+		
 			services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -77,6 +68,7 @@ namespace HomeHarvest.Server
 				app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
 				app.UseWebAssemblyDebugging();
+				
 			}
 			else
 			{

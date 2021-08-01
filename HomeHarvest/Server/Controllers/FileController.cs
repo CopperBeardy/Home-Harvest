@@ -1,8 +1,10 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using HomeHarvest.Server.Helpers;
+using HomeHarvest.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
@@ -17,9 +19,9 @@ namespace HomeHarvest.Server.Controllers
     {
         private readonly string _azureConnectionString;
         private readonly string _azureContainerName;
-        public FileController(IConfiguration config)
+        public FileController(IOptions<BlobContainerConnection> conString )
         {
-            _azureConnectionString = config.GetConnectionString("BlobStorageConnection");
+            _azureConnectionString = conString.Value.ConnectionString.ToString();
             _azureContainerName = "upload-container";
         }
 
@@ -68,7 +70,7 @@ namespace HomeHarvest.Server.Controllers
 		//              ExpiresOn = DateTime.UtcNow.AddMinutes(1)
 		//          };
 		//          token.SetPermissions(BlobAccountSasPermissions.Read);
-		//          var stoken = token.ToSasQueryParameters(new Azure.Storage.StorageSharedKeyCredential("homeharveststorage", "zPuFS38sW7gv8WAgSPoLbn/zWdJML2Wi+LIPDS3T8rRJocGLHUA7Ukc1/LOs8iv8g5wolBahZvw6o+5YId4ATw=="));
+		//          var stoken = token.ToSasQueryParameters(new Azure.Storage.StorageSharedKeyCredential("homeharveststorage", ));
 		//          var container = new BlobContainerClient(_azureConnectionString, "upload-container");
 		//          var client =   container.GetBlobClient(name);
 		//          return Ok( client.Uri.ToString() + "?" + stoken);
