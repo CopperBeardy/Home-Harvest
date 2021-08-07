@@ -43,7 +43,7 @@ namespace HomeHarvest.Server.Controllers
 					{
 						await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = "image/png" });
 					}
-					return Ok(blob.Uri.ToString());
+					return Ok();
 				}
 				return BadRequest();
             }

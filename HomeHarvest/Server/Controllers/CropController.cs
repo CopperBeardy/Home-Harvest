@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HomeHarvest.Server.Data;
@@ -86,11 +86,12 @@ namespace HomeHarvest.Server.Controllers
 
 		// POST: api/Crop
 		[HttpPost]
-        public async Task<bool> PostCrop(CropDto cropDto)
+        public async Task<bool> PostCrop(CreateCropDto cropDto)
         {
             var crop = _mapper.Map<Crop>(cropDto);
 			try
 			{
+                crop.Year = DateTime.Now.Year;
                 _context.Crops.Add(crop);
                 await _context.SaveChangesAsync();
                 _logger.LogInformation($"New Crop item with Id {crop.Id} has been added to the Db ");

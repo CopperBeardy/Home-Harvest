@@ -23,52 +23,24 @@ namespace HomeHarvest.Client.HttpRepositories
 			_httpClient = _factory.CreateClient("HomeHarvest.ServerAPI");
 		}
 
-		public async Task<string> UploadPlotImage(MultipartFormDataContent content)
-		{
-			var postResult = await _httpClient.PostAsync("api/file", content);
-			var postContent = await postResult.Content.ReadAsStringAsync();
-			if (!postResult.IsSuccessStatusCode)
-			{
-				throw new ApplicationException(postContent);
-			}
-			else
-			{
-				return postContent;
-			}
-		}
-		public async Task<List<CropDto>> GetAll()
-		{
-			var result = await _httpClient.GetFromJsonAsync<List<CropDto>>("api/crop");
+		public async Task<bool> UploadPlotImage(MultipartFormDataContent content) =>
+			(await _httpClient.PostAsync("api/file", content)).IsSuccessStatusCode;
+
+		public async Task<List<CropDto>> GetAll() => 
+			await _httpClient.GetFromJsonAsync<List<CropDto>>("api/crop");
 		
-			return result;
-		}
-
-		public async Task<string> DownloadPlotImage(string name)
-		{
-
-			return $"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
-		}
-
-
-		public async Task<bool> Create(CropDto crop)
-		{
-			
-			var postResult =  await _httpClient.PostAsJsonAsync("api/crop", crop);
-			return postResult.IsSuccessStatusCode;
-		}
-
-		public async Task<string> Update(CropDto crop)
-		{
-			//Todo Modify the crop data
-			throw new NotImplementedException();
-		}
-
-		public async Task<string> Delete(CropDto crop)
-		{
-			//Todo delete crop and relate image and details
-			throw new NotImplementedException();
-		}
-
+		public async Task<string> DownloadPlotImage(string name)=>
+			$"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
 		
+		public async Task<bool> Create(CreateCropDto crop) => 
+			(await _httpClient.PostAsJsonAsync("api/crop", crop)).IsSuccessStatusCode;
+
+		public async Task<bool> Update(int id, CropDto crop)=>
+			(await _httpClient.PutAsJsonAsync($"api/crop/{id}", crop)).IsSuccessStatusCode;
+
+		public async Task<bool> Delete(int id) =>
+			(await _httpClient.DeleteAsync($"api/crop/{id}")).IsSuccessStatusCode;
+
+
 	}
 }

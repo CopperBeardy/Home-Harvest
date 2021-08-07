@@ -21,12 +21,18 @@
         </DxStackLayoutItem>
          <DxStackLayoutItem Length="2fr">
             <Template>
+                @if(ShowRightPanel)
+                {
                 @if (IsAddVisible)
                 {
+                  
                     <AddCrop  onAdd="@ToggleAddVisible" />
                 }else
-                  {
-                         <img src="@Img"  />  
+                  {  <div>
+                         <img src="@Img"  /> 
+                         <DxButton Text=Details />
+                         </div>
+                }
                 }
             </Template>
         </DxStackLayoutItem>
@@ -34,45 +40,4 @@
     </DxStackLayout>
 
 
-@code {
-    IEnumerable<CropDto> Values { get; set; }
-    public string Img { get; set; }
-    [Parameter]
-    public IEnumerable<CropDto> CropDtos { get; set; } = new List<CropDto>();
-    [Inject]
-    public ICropRepository CropRepository { get; set;}
 
-    [Parameter]
-    public bool IsAddVisible { get; set; } = false;
-
-    protected override Task OnInitializedAsync()
-    {
-       _ =  LoadCrops();
-       Values = CropDtos.Take(1);
-     
-        return base.OnInitializedAsync();
-    }
-
-    public async Task LoadCrops()
-    {
-        CropDtos = await CropRepository.GetAll();
-        await InvokeAsync(StateHasChanged);
-    }
-
-    public async Task HandleNewCrop()
-    {
-        IsAddVisible = true;
-    }
-    public async Task ToggleAddVisible(bool visible)
-    {
-         IsAddVisible = visible;
-        await LoadCrops();    
-    }
-
-    public async Task SelectedItemChanged(IEnumerable<CropDto> crops)
-    {
-        Img = await CropRepository.DownloadPlotImage(crops.First().PlotImage);
-     
-       
-    }
-}

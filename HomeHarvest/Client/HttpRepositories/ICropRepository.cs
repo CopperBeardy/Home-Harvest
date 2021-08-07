@@ -7,11 +7,11 @@ namespace HomeHarvest.Client.HttpRepositories
 {
 	public interface ICropRepository
 	{
-		Task<List<CropDto>> GetAll();
-		Task<bool> Create(CropDto crop);
-		Task<string> Delete(CropDto crop);
-	Task<string> Update(CropDto crop);
+		Task<bool> Create(CreateCropDto crop);
+		Task<bool> Delete(int id);
 		Task<string> DownloadPlotImage(string name);
-		Task<string> UploadPlotImage(MultipartFormDataContent content);
+		Task<List<CropDto>> GetAll();
+		Task<bool> Update(int id,CropDto crop);
+		Task<bool> UploadPlotImage(MultipartFormDataContent content);
 	}
 }
