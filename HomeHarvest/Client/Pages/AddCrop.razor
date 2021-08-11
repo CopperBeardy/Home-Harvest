@@ -1,8 +1,0 @@
-﻿<h3>AddCrop</h3>
-
-<EditForm Model="@Crop" OnValidSubmit="@HandleValidSubmit">
-    <DxTextBox @bind-Text="@Crop.Location" />   
-    <InputFile OnChange="@HandleSelected"/>
-    <DxButton SubmitFormOnClick="true" Text="Add"/>
-</EditForm>
-

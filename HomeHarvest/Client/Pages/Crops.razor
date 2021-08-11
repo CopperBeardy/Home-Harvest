@@ -1,40 +1,28 @@
 ﻿@page "/crops"
 <h3>Crops</h3>
-    <DxStackLayout CssClass="w-100 ch-480">    
+     <AddCrop  onAdd="@LoadCrops"  />
+    <DxStackLayout CssClass="w-100 ch-480">
     <Items>
         <DxStackLayoutItem >
-            <Template>
-                <DxButton Text="Add Crop" Click="@HandleNewCrop"/>
-                
+            <Template>   
                 <DxListBox Data="@CropDtos"
-                                    @bind-Values="@Values"                                     
+                                    @bind-Values="@Values"
                                     SelectionMode="ListBoxSelectionMode.Single"
                                     ListRenderMode="ListRenderMode.Virtual" 
                                     SelectedItemsChanged="@((IEnumerable<CropDto> values ) => SelectedItemChanged(values) )"
                                     style="min-height:200px;">
                     <DxListEditorColumn FieldName="LocationYear" Caption="Crop year" />
-                 </DxListBox>
-                 <p class="demo-text cw-400 mt-2 text-muted">
-                     Selected item: <b>@Values.FirstOrDefault()?.LocationYear</b>
-                     </p>           
+                 </DxListBox>  
             </Template>
         </DxStackLayoutItem>
          <DxStackLayoutItem Length="2fr">
-            <Template>
-                @if(ShowRightPanel)
-                {
-                @if (IsAddVisible)
-                {
-                  
-                    <AddCrop  onAdd="@ToggleAddVisible" />
-                }else
-                  {  <div>
-                         <img src="@Img"  /> 
-                         <DxButton Text=Details />
+             <Template>
+                        <div> 
+                            <img src="@Img"/>
+                            <DxButton  Text=Details />
+                           
                          </div>
-                }
-                }
-            </Template>
+             </Template>
         </DxStackLayoutItem>
     </Items>
     </DxStackLayout>

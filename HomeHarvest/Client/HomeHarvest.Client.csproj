@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Shared\HomeHarvest.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\plotimages\" />
-  </ItemGroup>
-
 </Project>

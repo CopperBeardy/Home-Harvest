@@ -19,23 +19,18 @@ using HomeHarvest.Shared;
 using HomeHarvest.Shared.Dtos;
 using System.IO;
 using DevExpress.Blazor;
+using HomeHarvest.Client.Components;
 
 namespace HomeHarvest.Client.Pages
 {
     public partial class Crops
-    {
-        IEnumerable<CropDto> Values { get; set; }
-
-        public string Img { get; set; }
-
-        [Parameter]
-        public IEnumerable<CropDto> CropDtos { get; set; } = new List<CropDto>();
+    {  
         [Inject]
-        public ICropRepository CropRepository { get; set; }
+        public ICropRepository CropRepository { get; set; }  
+        public IEnumerable<CropDto> CropDtos { get; set; } = new List<CropDto>();
+        IEnumerable<CropDto> Values { get; set; }      
+        protected string Img { get; set; }
 
-        public bool ShowRightPanel { get; set; } = false;
-        [Parameter]
-        public bool IsAddVisible { get; set; } = false;
         protected override Task OnInitializedAsync()
         {
             _ = LoadCrops();
@@ -46,27 +41,10 @@ namespace HomeHarvest.Client.Pages
         public async Task LoadCrops()
         {
             CropDtos = await CropRepository.GetAll();
-            await InvokeAsync(StateHasChanged);
+           await InvokeAsync(StateHasChanged);
         }
 
-        public async Task HandleNewCrop()
-        {
-            ShowRightPanel = true;
-            IsAddVisible = true;
-        }
-
-        public async Task ToggleAddVisible(bool visible)
-        {
-            IsAddVisible = visible;
-
-            await LoadCrops();
-        }
-
-        public async Task SelectedItemChanged(IEnumerable<CropDto> crops)
-        {
-            ShowRightPanel = true;
-
+		public async Task SelectedItemChanged(IEnumerable<CropDto> crops) => 
             Img = await CropRepository.DownloadPlotImage(crops.First().PlotImage);
-        }
-    }
+	}
 }
