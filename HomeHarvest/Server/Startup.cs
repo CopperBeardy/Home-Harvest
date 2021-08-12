@@ -1,5 +1,6 @@
 using HomeHarvest.Server.Data;
 using HomeHarvest.Server.Models;
+using HomeHarvest.Server.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,7 @@ namespace HomeHarvest.Server
 			});
 			services.Configure<BlobContainerConnection>(Configuration.GetSection("BlobContainerConnection"));
 			services.AddAutoMapper(typeof(Startup));
+			services.AddScoped<IBlobService, BlobService>();
 			services.AddDatabaseDeveloperPageExceptionFilter();
 		
 			services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)

@@ -24,8 +24,7 @@ namespace HomeHarvest.Client.HttpRepositories
 			_httpClient = _factory.CreateClient("HomeHarvest.ServerAPI");
 		}
 
-		public async Task<bool> UploadPlotImage(MultipartFormDataContent content) =>
-			(await _httpClient.PostAsync("api/file", content)).IsSuccessStatusCode;
+
 
 
 
@@ -38,11 +37,11 @@ namespace HomeHarvest.Client.HttpRepositories
 		public async Task<string> DownloadPlotImage(string name)=>
 			$"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
 
-		public async Task<bool> Create(CreateCropDto crop, MultipartFormDataContent content)
+		public async Task<bool> Create(CreateCropDto crop)
 		{
 			var uploadSuccess = false;
 			var createSuccess = false;
-			 await UploadPlotImage(content);
+			// await UploadPlotImage(content);
 			createSuccess = (await _httpClient.PostAsJsonAsync("api/crop", crop)).IsSuccessStatusCode;
 			
 		

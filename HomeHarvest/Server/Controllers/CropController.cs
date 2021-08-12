@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using HomeHarvest.Server.Entities;
 using HomeHarvest.Shared.Dtos;
 using AutoMapper;
+using HomeHarvest.Server.Services;
 
 namespace HomeHarvest.Server.Controllers
 {
@@ -22,12 +23,14 @@ namespace HomeHarvest.Server.Controllers
         private readonly ApplicationDbContext _context;
 		private readonly ILogger<CropController> _logger;
 		private readonly IMapper _mapper;
+		private readonly IBlobService _blobService;
 
-		public CropController(ApplicationDbContext context, ILogger<CropController> logger, IMapper mapper)
+		public CropController(ApplicationDbContext context, ILogger<CropController> logger, IMapper mapper,IBlobService blobService)
         {
             _context = context;
 			_logger = logger;
 			_mapper = mapper;
+			_blobService = blobService;
 		}
 
         // GET: api/Crop
@@ -88,6 +91,7 @@ namespace HomeHarvest.Server.Controllers
 		[HttpPost]
         public async Task<bool> PostCrop(CreateCropDto cropDto)
         {
+            await _blobService.Upload(cropDto.Image,cropDto.PlotImage);
             var crop = _mapper.Map<Crop>(cropDto);
 			try
 			{

@@ -5,15 +5,14 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace HomeHarvest.Server.Helpers
+namespace HomeHarvest.Server.Services
 {
 	public static class ImageConvertor
 	{
-        public static byte[] Sizer(IFormFile file)
+        public static byte[] Sizer(byte[] Image)
 		{        
-            using (var memStream = file.OpenReadStream())
-            {
-                using (var image = new MagickImage(memStream))
+            
+                using (var image = new MagickImage(Image))
                 {
                     var size = new MagickGeometry(300, 500);
                     size.IgnoreAspectRatio = true;
@@ -22,7 +21,7 @@ namespace HomeHarvest.Server.Helpers
                     image.Format =  MagickFormat.Png;                 
                    return image.ToByteArray();
                 }
-            }
+            
         }
 	}
 }

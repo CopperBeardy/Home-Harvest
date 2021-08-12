@@ -25,7 +25,7 @@ namespace HomeHarvest.Client.Components
      
         public async Task HandleValidSubmit()
         {
-               var success = await CropRepository.Create(Crop,Content);
+               var success = await CropRepository.Create(Crop);
                 if (success)
                 {
                     Crop = new CreateCropDto();
@@ -36,15 +36,22 @@ namespace HomeHarvest.Client.Components
 
 		public void ShowForm() => ShowInputControls = !ShowInputControls;
 
-		private void  HandleSelected(InputFileChangeEventArgs e)
+		private async Task  HandleSelected(InputFileChangeEventArgs e)
         {
             var imageFile = e.File;
-            Crop.PlotImage = imageFile.Name;
-			using (var ms = imageFile.OpenReadStream(imageFile.Size))
-			{
-				var Content = new MultipartFormDataContent();
-				Content.Add(new StreamContent(ms, Convert.ToInt32(imageFile.Size)), "image", imageFile.Name);
-			}
-		}
+              Crop.PlotImage = imageFile.Name;
+            var stream = imageFile.OpenReadStream(imageFile.Size);
+            MemoryStream ms = new();
+            await stream.CopyToAsync(ms);
+            Crop.Image = ms.ToArray();
+
+            //         var imageFile = e.File;
+            //       //  Crop.PlotImage = imageFile.Name;
+            //using (var ms =  imageFile.OpenReadStream(imageFile.Size))
+            //{
+            //	var Content = new MultipartFormDataContent();
+            //	 Content.Add(new StreamContent(ms, Convert.ToInt32(imageFile.Size)), "image", imageFile.Name);
+            //}
+        }
     }
 }
