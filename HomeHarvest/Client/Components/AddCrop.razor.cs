@@ -38,18 +38,13 @@ namespace HomeHarvest.Client.Components
 
 		private void  HandleSelected(InputFileChangeEventArgs e)
         {
-
-                
-                var imageFile = e.File;
-                Crop.PlotImage = imageFile.Name;
+            var imageFile = e.File;
+            Crop.PlotImage = imageFile.Name;
 			using (var ms = imageFile.OpenReadStream(imageFile.Size))
 			{
 				var Content = new MultipartFormDataContent();
 				Content.Add(new StreamContent(ms, Convert.ToInt32(imageFile.Size)), "image", imageFile.Name);
 			}
-
-
-
 		}
     }
 }
