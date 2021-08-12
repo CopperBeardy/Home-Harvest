@@ -27,12 +27,14 @@ namespace HomeHarvest.Client.HttpRepositories
 		public async Task<bool> UploadPlotImage(MultipartFormDataContent content) =>
 			(await _httpClient.PostAsync("api/file", content)).IsSuccessStatusCode;
 
-	
 
 
-		public async Task<List<CropDto>> GetAll() => 
-			await _httpClient.GetFromJsonAsync<List<CropDto>>("api/crop");
-		
+
+		public async Task<List<CropDto>> GetAll()
+		{
+			return await _httpClient.GetFromJsonAsync<List<CropDto>>("api/crop");
+		}
+
 		public async Task<string> DownloadPlotImage(string name)=>
 			$"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
 

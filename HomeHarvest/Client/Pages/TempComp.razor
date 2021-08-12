@@ -1,0 +1,14 @@
+﻿@page "/temp"
+<h3>TempComp</h3>
+
+<button @onclick="ShowMessage" >Hit me</button>
+<label >@hello</label>
+
+@code {
+	public string hello { get; set; } = string.Empty;
+
+	public void ShowMessage()
+	{
+		hello = "hello";
+	}
+}
