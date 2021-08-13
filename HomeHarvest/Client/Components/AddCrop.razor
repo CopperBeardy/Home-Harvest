@@ -1,11 +1,10 @@
-﻿<div class="mb-5">
+﻿<div class="mb-2">
 	@if (!ShowInputControls)
 	{
 		<DxButton Click="@ShowForm" Text="New Crop" />
 	}
 	else
 	{
-
 		<EditForm Model="@Crop" OnValidSubmit="@HandleValidSubmit">
 		<DataAnnotationsValidator />
 			<div class="HorizontalForm ">

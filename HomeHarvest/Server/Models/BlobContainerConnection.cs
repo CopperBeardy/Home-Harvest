@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HomeHarvest.Server.Models
+﻿namespace HomeHarvest.Server.Models
 {
 	public class BlobContainerConnection
 	{

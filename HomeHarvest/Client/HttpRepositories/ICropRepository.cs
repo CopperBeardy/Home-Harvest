@@ -8,7 +8,7 @@ namespace HomeHarvest.Client.HttpRepositories
 		Task<bool> Delete(int id);
 		Task<string> DownloadPlotImage(string name);
 		Task<List<CropDto>> GetAll();
-		Task<bool> Update(int id,CropDto crop);
-	
+		Task<bool> Update(int id, CropDto crop);
+
 	}
 }

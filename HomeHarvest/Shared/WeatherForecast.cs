@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HomeHarvest.Shared
+﻿namespace HomeHarvest.Shared
 {
 	public class WeatherForecast
 	{

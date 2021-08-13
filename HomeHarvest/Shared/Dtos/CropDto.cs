@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace HomeHarvest.Shared.Dtos
 {
 	public class CropDto
 	{
-	
+
 
 		public int Id { get; set; }
 
@@ -19,14 +12,14 @@ namespace HomeHarvest.Shared.Dtos
 		/// Year in which the crop was planted in
 		/// </summary>
 		[Required(ErrorMessage = "You must enter a year for the crop being sowed")]
-	
+
 		public int Year { get; set; }
 
 
 		public string Location { get; set; }
 
-		
-		public string LocationYear  => $"{Location}, {Year}";
+
+		public string LocationYear => $"{Location}, {Year}";
 
 		/// <summary>
 		/// Image name of the plot for the current crop

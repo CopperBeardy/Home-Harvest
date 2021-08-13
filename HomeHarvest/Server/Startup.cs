@@ -2,19 +2,7 @@ using HomeHarvest.Server.Data;
 using HomeHarvest.Server.Models;
 using HomeHarvest.Server.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using System.IO;
-using System.Linq;
 
 namespace HomeHarvest.Server
 {
@@ -35,7 +23,7 @@ namespace HomeHarvest.Server
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
 
-	
+
 			services.AddCors(policy =>
 			{
 				policy.AddPolicy("CorsPolicy", opt => opt
@@ -48,7 +36,7 @@ namespace HomeHarvest.Server
 			services.AddAutoMapper(typeof(Startup));
 			services.AddScoped<IBlobService, BlobService>();
 			services.AddDatabaseDeveloperPageExceptionFilter();
-		
+
 			services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -70,7 +58,7 @@ namespace HomeHarvest.Server
 				app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
 				app.UseWebAssemblyDebugging();
-				
+
 			}
 			else
 			{

@@ -1,31 +1,23 @@
-﻿@page "/crops"
+﻿@page "/Crops"
+@inject ICropRepository CropRepository
 <h3>Crops</h3>
+    <AddCrop onAdd="@LoadData" />
+	<DxDataGrid @ref="grid"
+		Data="@CropItems"
+		@bind-SingleSelectedDataRow="@SelectedRow"		
+                RowUpdatingAsync="@OnRowUpdatingAsync"
+                RowRemovingAsync="@OnRowRemovingAsync" >
+          <HeaderTemplate>
+            <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+                <DxToolbarItem Text="Edit" Click="@OnEditClick" IconCssClass="grid-toolbar-edit" Enabled="@Enabled" />
+                <DxToolbarItem Text="Delete" Click="@OnDeleteClick" IconCssClass="grid-toolbar-delete" Enabled="@Enabled" />
+              </DxToolbar>
+        </HeaderTemplate>
+        <Columns>
+            <DxDataGridColumn Field ="@nameof(CropDto.Location)"/>
+             <DxDataGridColumn Field ="@nameof(CropDto.Year)" EditorVisible="false"/>
+		</Columns>
+   
+	</DxDataGrid>
 
-
-     <AddCrop  onAdd="@LoadCrops"  />
-    <DxStackLayout CssClass="w-100 ch-480">
-    <Items>
-        <DxStackLayoutItem >
-            <Template>   
-                <DxListBox Data="@CropDtos"
-                                    @bind-Values="@Values"
-                                    SelectionMode="ListBoxSelectionMode.Single"
-                                    ListRenderMode="ListRenderMode.Virtual" 
-                                    SelectedItemsChanged="@((IEnumerable<CropDto> values ) => SelectedItemChanged(values) )"
-                                    style="min-height:200px;">
-                    <DxListEditorColumn FieldName="LocationYear" Caption="Crop year" />
-                 </DxListBox>  
-            </Template>
-        </DxStackLayoutItem>
-         <DxStackLayoutItem Length="2fr">
-             <Template>
-                        <div> 
-                            <img src="@Img"/>
-                            <DxButton  Text=Details />
-                           
-                         </div>
-             </Template>
-        </DxStackLayoutItem>
-    </Items>
-    </DxStackLayout>
 

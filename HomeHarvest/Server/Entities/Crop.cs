@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HomeHarvest.Server.Entities
 {
@@ -21,11 +16,11 @@ namespace HomeHarvest.Server.Entities
 
 		public string Location { get; set; }
 
-	
+
 		/// <summary>
 		/// Image name of the plot for the current crop
 		/// </summary>
-		public string  PlotImage { get; set; }
+		public string PlotImage { get; set; }
 		/// <summary>
 		/// Collection of plants that were planted in the crop year
 		/// </summary>

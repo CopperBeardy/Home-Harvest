@@ -5,21 +5,8 @@
 Tracking for all you home and allotment plant growing
 
 
-<InputFile OnChange="@HandleSelected" />
-@code{
-	private async Task HandleSelected(InputFileChangeEventArgs e)
-        {
-            var imageFile = e.File;
-		//  Crop.PlotImage = imageFile.Name;
-		var stream = imageFile.OpenReadStream(imageFile.Size);
-		MemoryStream ms = new();
-		await stream.CopyToAsync(ms);
-		var arr = ms.ToArray();
 
-		//using ()
-			//{
-			//	var Content = new MultipartFormDataContent();
-			//	Content.Add(new StreamContent(ms, Convert.ToInt32(imageFile.Size)), "image", imageFile.Name);
-			//}
-		}
+@code{
+	
+
 }
