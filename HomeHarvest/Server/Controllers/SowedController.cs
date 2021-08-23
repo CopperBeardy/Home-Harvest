@@ -1,5 +1,7 @@
-﻿using HomeHarvest.Server.Data;
+﻿using AutoMapper;
+using HomeHarvest.Server.Data;
 using HomeHarvest.Server.Entities;
+using HomeHarvest.Shared.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,28 +11,28 @@ namespace HomeHarvest.Server.Controllers
 	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
-	public class SowController : ControllerBase
+	public class SowedController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
-		private readonly ILogger<SowController> _logger;
-
-		public SowController(ApplicationDbContext context, ILogger<SowController> logger)
+		private readonly ILogger<SowedController> _logger;
+		private readonly IMapper _mapper;
+		public SowedController(ApplicationDbContext context, ILogger<SowedController> logger, IMapper mapper)
 		{
 			_context = context;
 			_logger = logger;
+			_mapper = mapper;
 		}
 
 		// GET: api/Sow
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Sow>>> GetSows() =>
-			await _context.Sows.ToListAsync();
+		public async Task<ActionResult<List<SownDto>>> GetSown() => 
+			_mapper.Map<List<SownDto>>(await _context.Sowns.ToListAsync());
 
-
-		// GET: api/Sow/5
+		//// GET: api/Sow/5
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Sow>> GetSow(int id)
+		public async Task<ActionResult<SownDto>> GetSow(int id)
 		{
-			var sow = await _context.Sows
+			var sow = await _context.Sowns
 				.Include(p => p.Plant)
 				.FirstOrDefaultAsync(x => x.Id.Equals(id));
 
@@ -39,19 +41,20 @@ namespace HomeHarvest.Server.Controllers
 				return NotFound();
 			}
 
-			return sow;
+			return _mapper.Map<SownDto>(sow);
 		}
 
 		// PUT: api/Sow/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutSow(int id, Sow sow)
+		public async Task<IActionResult> PutSow(int id, SownDto sow)
 		{
 			if (id != sow.Id)
 			{
 				return BadRequest();
 			}
-			_context.Entry(sow).State = EntityState.Modified;
+			var entity = _mapper.Map<Sown>(sow);
+			_context.Sowns.Update(entity);
 
 			try
 			{
@@ -79,32 +82,32 @@ namespace HomeHarvest.Server.Controllers
 		// POST: api/Sow
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Sow>> PostSow(Sow sow)
+		public async Task<ActionResult> PostSow(CreateSownDto sow)
 		{
-			_context.Sows.Add(sow);
+			var entity = _mapper.Map<Sown>(sow);
+			_context.Sowns.Add(entity);
 			await _context.SaveChangesAsync();
-			_logger.LogInformation($"New Sow Object with Id {sow.Id} has been added to the Db ");
-			return CreatedAtAction("GetSow", new { id = sow.Id }, sow);
+			return Ok();
 		}
 
 		// DELETE: api/Sow/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteSow(int id)
 		{
-			var sow = await _context.Sows.FindAsync(id);
+			var sow = await _context.Sowns.FindAsync(id);
 			if (sow == null)
 			{
 				return NotFound();
 			}
 
-			_context.Sows.Remove(sow);
+			_context.Sowns.Remove(sow);
 			await _context.SaveChangesAsync();
 			_logger.LogInformation($"Sow item with Id {id} has been removed Db ");
 
 			return NoContent();
 		}
 
-		private bool SowExists(int id) => _context.Sows.Any(e => e.Id == id);
+		private bool SowExists(int id) => _context.Sowns.Any(e => e.Id == id);
 
 	}
 }

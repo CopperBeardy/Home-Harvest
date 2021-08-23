@@ -40,14 +40,6 @@ namespace HomeHarvest.Client.Components
 			MemoryStream ms = new();
 			await stream.CopyToAsync(ms);
 			Crop.Image = ms.ToArray();
-
-			//         var imageFile = e.File;
-			//       //  Crop.PlotImage = imageFile.Name;
-			//using (var ms =  imageFile.OpenReadStream(imageFile.Size))
-			//{
-			//	var Content = new MultipartFormDataContent();
-			//	 Content.Add(new StreamContent(ms, Convert.ToInt32(imageFile.Size)), "image", imageFile.Name);
-			//}
 		}
 	}
 }

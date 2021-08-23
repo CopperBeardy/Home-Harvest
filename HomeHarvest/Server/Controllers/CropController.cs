@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HomeHarvest.Server.Controllers
 {
-	[Authorize]
+	//[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CropController : ControllerBase
@@ -41,6 +41,7 @@ namespace HomeHarvest.Server.Controllers
 			{
 				var crop = await _context.Crops
 					.Include(s => s.Sowed)
+					.ThenInclude(p => p.Plant)
 					.FirstOrDefaultAsync(x => x.Id.Equals(id));
 				return _mapper.Map<CropDto>(crop);
 			}

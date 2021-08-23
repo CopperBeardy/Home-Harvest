@@ -9,6 +9,6 @@ namespace HomeHarvest.Client.HttpRepositories
 		Task<string> DownloadPlotImage(string name);
 		Task<List<CropDto>> GetAll();
 		Task<bool> Update(int id, CropDto crop);
-
+		Task<CropDto> GetCrop(int cropId);
 	}
 }

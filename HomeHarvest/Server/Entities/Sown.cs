@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeHarvest.Server.Entities
 {
-	public class Sow
+	public class Sown
 	{
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
@@ -16,19 +16,8 @@ namespace HomeHarvest.Server.Entities
 
 		[Required(ErrorMessage = "The date you sowed this plant is required")]
 		public DateTime PlantedOn { get; set; }
-		/// <summary>
-		/// Duration in which it takes the plant to flower or ready for harvesting
-		/// </summary>
-		[Required(ErrorMessage = "Length of time for flowering or Grow time is required")]
-		public double GrowInWeeks { get; set; }
 
-		/// <summary>
-		/// Which years crop the plant belongs to
-		/// </summary>
-		public Crop Crop { get; set; }
 
-		[ForeignKey(nameof(Crop))]
-		public int CropId { get; set; }
 
 		[ForeignKey(nameof(Plant))]
 		public int PlantId { get; set; }

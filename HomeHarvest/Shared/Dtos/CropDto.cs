@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace HomeHarvest.Shared.Dtos
 {
+	
 	public class CropDto
 	{
-
-
 		public int Id { get; set; }
 
 		/// <summary>
@@ -15,23 +15,18 @@ namespace HomeHarvest.Shared.Dtos
 
 		public int Year { get; set; }
 
-
 		public string Location { get; set; }
-
-
-		public string LocationYear => $"{Location}, {Year}";
-
 		/// <summary>
 		/// Image name of the plot for the current crop
 		/// </summary>
 
 		public string PlotImage { get; set; }
 
-
 		/// <summary>
 		/// Collection of plants that were planted in the crop year
 		/// </summary>
 
-		public virtual ICollection<SowDto> Sowed { get; set; }
+		[JsonInclude]
+		public  List<SownDto> Sowed { get; set; } 
 	}
 }

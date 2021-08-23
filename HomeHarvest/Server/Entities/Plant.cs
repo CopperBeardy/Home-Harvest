@@ -19,7 +19,11 @@ namespace HomeHarvest.Server.Entities
 		[Required(ErrorMessage = "A common name of the plant is required")]
 		[StringLength(150, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 150 characters")]
 		public string Name { get; set; }
-
+		/// <summary>
+		/// Duration in which it takes the plant to flower or ready for harvesting
+		/// </summary>
+		[Required(ErrorMessage = "Length of time for flowering or Grow time is required")]
+		public double GrowInWeeks { get; set; }
 
 
 

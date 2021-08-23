@@ -1,0 +1,16 @@
+﻿@page "/sown/{id}"
+<h3>Sown</h3>
+<div class="flex ">
+	<div>
+		<DxDataGrid 	Data="@Crop.Sowed"
+	
+                RowUpdatingAsync="@OnRowUpdatingAsync"
+                RowRemovingAsync="@OnRowRemovingAsync" >
+		</DxDataGrid>
+	</div>
+	<div>
+	<img src="ImgSource">
+	</div>
+</div>
+
+

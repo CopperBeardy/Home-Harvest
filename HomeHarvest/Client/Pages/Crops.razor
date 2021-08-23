@@ -1,21 +1,20 @@
 ﻿@page "/Crops"
-@inject ICropRepository CropRepository
+
 <h3>Crops</h3>
     <AddCrop onAdd="@LoadData" />
-	<DxDataGrid @ref="grid"
-		Data="@CropItems"
-		@bind-SingleSelectedDataRow="@SelectedRow"		
+	<DxDataGrid 		Data="@CropItems"
+                @bind-SingleSelectedDataRow="@SelectedRow"		
                 RowUpdatingAsync="@OnRowUpdatingAsync"
                 RowRemovingAsync="@OnRowRemovingAsync" >
-          <HeaderTemplate>
-            <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
-                <DxToolbarItem Text="Edit" Click="@OnEditClick" IconCssClass="grid-toolbar-edit" Enabled="@Enabled" />
-                <DxToolbarItem Text="Delete" Click="@OnDeleteClick" IconCssClass="grid-toolbar-delete" Enabled="@Enabled" />
-              </DxToolbar>
-        </HeaderTemplate>
         <Columns>
             <DxDataGridColumn Field ="@nameof(CropDto.Location)"/>
              <DxDataGridColumn Field ="@nameof(CropDto.Year)" EditorVisible="false"/>
+             <DxDataGridColumn Field="Details"  EditorVisible="false">
+                 <DisplayTemplate>
+                     <a class="d-block text-left" href="/Sown/@SelectedRow.Id">Sown plants</a>
+                  </DisplayTemplate>
+			 </DxDataGridColumn>
+              <DxDataGridCommandColumn Width="120px" NewButtonVisible="false"/>
 		</Columns>
    
 	</DxDataGrid>

@@ -10,7 +10,8 @@ namespace HomeHarvest.Server.Profiles
 		{
 			CreateMap<Crop, CropDto>().ReverseMap();
 			CreateMap<CreateCropDto, Crop>();
-			CreateMap<Sow, SowDto>().ReverseMap();
+			CreateMap<Sown, SownDto>().ReverseMap();
+			CreateMap<CreateSownDto, Sown>();
 			CreateMap<Plant, PlantDto>().ReverseMap();
 		}
 
