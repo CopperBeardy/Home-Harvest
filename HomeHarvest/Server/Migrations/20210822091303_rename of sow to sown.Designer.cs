@@ -4,14 +4,16 @@ using HomeHarvest.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HomeHarvest.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210822091303_rename of sow to sown")]
+    partial class renameofsowtosown
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,14 +75,14 @@ namespace HomeHarvest.Server.Migrations
                     b.ToTable("Plants");
                 });
 
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Sown", b =>
+            modelBuilder.Entity("HomeHarvest.Server.Entities.Sowed", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CropId")
+                    b.Property<int>("CropId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlantId")
@@ -100,7 +102,7 @@ namespace HomeHarvest.Server.Migrations
 
                     b.HasIndex("PlantId");
 
-                    b.ToTable("Sowns");
+                    b.ToTable("Sown");
                 });
 
             modelBuilder.Entity("HomeHarvest.Server.Models.ApplicationUser", b =>
@@ -406,17 +408,21 @@ namespace HomeHarvest.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Sown", b =>
+            modelBuilder.Entity("HomeHarvest.Server.Entities.Sowed", b =>
                 {
-                    b.HasOne("HomeHarvest.Server.Entities.Crop", null)
+                    b.HasOne("HomeHarvest.Server.Entities.Crop", "Crop")
                         .WithMany("Sowed")
-                        .HasForeignKey("CropId");
+                        .HasForeignKey("CropId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HomeHarvest.Server.Entities.Plant", "Plant")
                         .WithMany()
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Crop");
 
                     b.Navigation("Plant");
                 });

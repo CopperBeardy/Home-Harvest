@@ -1,11 +1,6 @@
 ﻿using HomeHarvest.Shared.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HomeHarvest.Shared.Dtos
 {
@@ -24,7 +19,11 @@ namespace HomeHarvest.Shared.Dtos
 		[Required(ErrorMessage = "A common name of the plant is required")]
 		[StringLength(150, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 150 characters")]
 		public string Name { get; set; }
-
+		/// <summary>
+		/// Duration in which it takes the plant to flower or ready for harvesting
+		/// </summary>
+		[Required(ErrorMessage = "Length of time for flowering or Grow time is required")]
+		public double GrowInWeeks { get; set; }
 
 
 

@@ -1,14 +1,5 @@
-﻿using HomeHarvest.Shared;
-using HomeHarvest.Shared.Dtos;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
+﻿using HomeHarvest.Shared.Dtos;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace HomeHarvest.Client.HttpRepositories
 {
@@ -16,58 +7,31 @@ namespace HomeHarvest.Client.HttpRepositories
 	{
 		private readonly HttpClient _httpClient;
 		private readonly IHttpClientFactory _factory;
-
+		private string _url = "api/crop";
 		public CropRepository(IHttpClientFactory factory)
 		{
 			_factory = factory;
 			_httpClient = _factory.CreateClient("HomeHarvest.ServerAPI");
 		}
+		public async Task<List<CropDto>> GetAll() =>
+		await _httpClient.GetFromJsonAsync<List<CropDto>>(_url);
 
-		public async Task<string> UploadPlotImage(MultipartFormDataContent content)
-		{
-			var postResult = await _httpClient.PostAsync("api/file", content);
-			var postContent = await postResult.Content.ReadAsStringAsync();
-			if (!postResult.IsSuccessStatusCode)
-			{
-				throw new ApplicationException(postContent);
-			}
-			else
-			{
-				return postContent;
-			}
-		}
-		public async Task<List<CropDto>> GetAll()
-		{
-			var result = await _httpClient.GetFromJsonAsync<List<CropDto>>("api/crop");
+		public async Task<string> DownloadPlotImage(string name) =>
+			$"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
+
+		public async Task<bool> Create(CreateCropDto crop) =>
+			 (await _httpClient.PostAsJsonAsync(_url, crop)).IsSuccessStatusCode;
+
+		public async Task<bool> Update(int id, CropDto crop) =>
+			(await _httpClient.PutAsJsonAsync($"{_url}/{id}", crop)).IsSuccessStatusCode;
+
+		public async Task<bool> Delete(int id) =>
+			(await _httpClient.DeleteAsync($"{_url}/{id}")).IsSuccessStatusCode;
+
+		public async Task<CropDto> GetCrop(int cropId) =>
+			await _httpClient.GetFromJsonAsync<CropDto>($"{_url}/{cropId}");
 		
-			return result;
-		}
-
-		public async Task<string> DownloadPlotImage(string name)
-		{
-
-			return $"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
-		}
-
-
-		public async Task<bool> Create(CropDto crop)
-		{
-			
-			var postResult =  await _httpClient.PostAsJsonAsync("api/crop", crop);
-			return postResult.IsSuccessStatusCode;
-		}
-
-		public async Task<string> Update(CropDto crop)
-		{
-			//Todo Modify the crop data
-			throw new NotImplementedException();
-		}
-
-		public async Task<string> Delete(CropDto crop)
-		{
-			//Todo delete crop and relate image and details
-			throw new NotImplementedException();
-		}
+	
 
 		
 	}

@@ -4,20 +4,15 @@ using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HomeHarvest.Server.Data
 {
 	public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
 	{
-
 		public static readonly string RowVersion = nameof(RowVersion);
-
 		public static readonly string DataDb = nameof(DataDb).ToLower();
+
 		public ApplicationDbContext(
 			DbContextOptions options,
 			IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
@@ -29,7 +24,7 @@ namespace HomeHarvest.Server.Data
 			modelBuilder.Entity<Crop>()
 			   .Property<byte[]>(RowVersion)
 			   .IsRowVersion();
-			modelBuilder.Entity<Sow>()
+			modelBuilder.Entity<Sown>()
 			   .Property<byte[]>(RowVersion)
 			   .IsRowVersion();
 			modelBuilder.Entity<Plant>()
@@ -38,7 +33,7 @@ namespace HomeHarvest.Server.Data
 			base.OnModelCreating(modelBuilder);
 		}
 		public DbSet<Crop> Crops { get; set; }
-		public DbSet<Sow> Sows { get; set; }
+		public DbSet<Sown> Sowns { get; set; }
 		public DbSet<Plant> Plants { get; set; }
 
 		public override void Dispose()
@@ -54,4 +49,3 @@ namespace HomeHarvest.Server.Data
 		}
 	}
 }
-

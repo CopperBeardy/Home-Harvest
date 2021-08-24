@@ -1,0 +1,36 @@
+﻿<Modal @ref="modalRef">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Delete Crop</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Text> Performing this action will permentaly remove the crop and associated plants. 
+            </Text>
+          
+         
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Cancel</Button>
+            <Button Color="Color.Danger" Clicked="@HideModal">Confirm</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
+@code {
+    [Parameter]
+    public string LocationYear { get; set; }
+    private Modal modalRef;
+
+    private void ShowModal()
+    {
+        modalRef.Show();
+    }
+
+    private void HideModal()
+    {
+        modalRef.Hide();
+    }
+}
+	

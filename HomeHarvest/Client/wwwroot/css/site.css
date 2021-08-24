@@ -1,0 +1,23 @@
+﻿.HorizontalForm {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;   
+}
+
+.HorizontalForm-item{
+    margin-right: 5px;
+}
+
+#CenteredItems{
+    display:flex;
+    align-items:center; 
+}
+
+.OneThirdWidth{
+    max-width: 30%;
+}
+
+.WrapText{
+    word-wrap: break-word;
+}
+

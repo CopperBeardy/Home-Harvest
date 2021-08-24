@@ -1,0 +1,27 @@
+﻿<div class="mb-2">
+	@if (!ShowInputControls)
+	{
+		<DxButton Click="@ShowForm" Text="New Crop" />
+	}
+	else
+	{
+		<EditForm Model="@Crop" OnValidSubmit="@HandleValidSubmit">
+		<DataAnnotationsValidator />
+			<div class="HorizontalForm ">
+				<div class="HorizontalForm-item " id="CenteredItems">
+					<label> Plot Name :  </label>
+					<DxTextBox @bind-Text="@Crop.Location" />
+				</div>
+				<div class="HorizontalForm-item">
+					<InputFile OnChange="@HandleSelected" />
+				</div>
+				<div class="HorizontalForm-item">
+					<DxButton SubmitFormOnClick="true" Text="Add" />
+				</div>
+				<div class="HorizontalForm-item">
+					<DxButton Click="@ShowForm" Text="Cancel" />
+				</div>
+			</div>
+		</EditForm>
+	}
+</div>

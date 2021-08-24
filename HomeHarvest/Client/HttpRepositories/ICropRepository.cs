@@ -1,17 +1,14 @@
 ﻿using HomeHarvest.Shared.Dtos;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace HomeHarvest.Client.HttpRepositories
 {
 	public interface ICropRepository
 	{
-		Task<List<CropDto>> GetAll();
-		Task<bool> Create(CropDto crop);
-		Task<string> Delete(CropDto crop);
-	Task<string> Update(CropDto crop);
+		Task<bool> Create(CreateCropDto crop);
+		Task<bool> Delete(int id);
 		Task<string> DownloadPlotImage(string name);
-		Task<string> UploadPlotImage(MultipartFormDataContent content);
+		Task<List<CropDto>> GetAll();
+		Task<bool> Update(int id, CropDto crop);
+		Task<CropDto> GetCrop(int cropId);
 	}
 }
