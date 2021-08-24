@@ -13,5 +13,11 @@
     align-items:center; 
 }
 
+.OneThirdWidth{
+    max-width: 30%;
+}
 
+.WrapText{
+    word-wrap: break-word;
+}
 

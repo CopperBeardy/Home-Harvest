@@ -108,14 +108,17 @@ namespace HomeHarvest.Server.Controllers
 			if (crop == null)
 			{
 				return NotFound();
+			}			
+			
+			var success = 	await _blobService.Delete(crop.PlotImage);
+			if (success)
+			{	
+				_context.Crops.Remove(crop);
+				await _context.SaveChangesAsync();
+				_logger.LogInformation($"Crop with Id: {id} has been remove from Db");
+				return Ok();
 			}
-
-			//Todo remove Image from blobstorage
-			_context.Crops.Remove(crop);
-			await _context.SaveChangesAsync();
-
-			_logger.LogInformation($"Crop with Id: {id} has been remove from Db");
-
+		
 			return NoContent();
 		}
 		private bool CropExists(int id) =>

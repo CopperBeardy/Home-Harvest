@@ -9,8 +9,11 @@ namespace HomeHarvest.Server.Services
 	{
 		private readonly string _azureConnectionString;
 		private readonly string _azureContainerName;
-		public BlobService(IOptions<BlobContainerConnection> conString)
+		private readonly ILogger<BlobService> _logger ;
+
+		public BlobService(IOptions<BlobContainerConnection> conString, ILogger<BlobService> logger)
 		{
+			_logger = logger;
 			_azureConnectionString = conString.Value.ConnectionString.ToString();
 			_azureContainerName = "upload-container";
 		}
@@ -22,7 +25,7 @@ namespace HomeHarvest.Server.Services
 			{
 				var container = new BlobContainerClient(_azureConnectionString, _azureContainerName);
 				await ContainerExist(container);
-				var blob = container.GetBlobClient($"{name}");
+				var blob = container.GetBlobClient(name);
 				await blob.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
 				using (var fileStream = new MemoryStream(resizedImage))
 				{
@@ -30,6 +33,25 @@ namespace HomeHarvest.Server.Services
 				}
 			}
 		}
+
+		public async Task<bool> Delete(string name)
+		{
+			try
+			{
+				var container = new BlobContainerClient(_azureConnectionString, _azureContainerName);
+				await ContainerExist(container);
+				var blob = container.GetBlobClient(name);
+				await blob.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
+				_logger.LogInformation($"Crop Image {name} has been deleted");
+				return true;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Error occurred when trying to delete {name}", ex);
+				return false;
+			}
+		}
+
 		private static async Task ContainerExist(BlobContainerClient container)
 		{
 			var createResponse = await container.CreateIfNotExistsAsync();

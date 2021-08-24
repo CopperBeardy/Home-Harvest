@@ -2,21 +2,10 @@
 
 <h3>Crops</h3>
     <AddCrop onAdd="@LoadData" />
-	<DxDataGrid 		Data="@CropItems"
-                @bind-SingleSelectedDataRow="@SelectedRow"		
-                RowUpdatingAsync="@OnRowUpdatingAsync"
-                RowRemovingAsync="@OnRowRemovingAsync" >
-        <Columns>
-            <DxDataGridColumn Field ="@nameof(CropDto.Location)"/>
-             <DxDataGridColumn Field ="@nameof(CropDto.Year)" EditorVisible="false"/>
-             <DxDataGridColumn Field="Details"  EditorVisible="false">
-                 <DisplayTemplate>
-                     <a class="d-block text-left" href="/Sown/@SelectedRow.Id">Sown plants</a>
-                  </DisplayTemplate>
-			 </DxDataGridColumn>
-              <DxDataGridCommandColumn Width="120px" NewButtonVisible="false"/>
-		</Columns>
-   
-	</DxDataGrid>
+    <div class="row">
+    @foreach(var crop in CropItems){
+       <CropIndexCard Crop="@crop" onDeleteSuccess="@LoadData"/>
+}
+</div>
 
 

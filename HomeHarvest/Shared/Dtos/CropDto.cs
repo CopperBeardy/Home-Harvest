@@ -20,6 +20,7 @@ namespace HomeHarvest.Shared.Dtos
 		/// Image name of the plot for the current crop
 		/// </summary>
 
+		public string LocationYear => $"{Location}, {Year}";
 		public string PlotImage { get; set; }
 
 		/// <summary>
