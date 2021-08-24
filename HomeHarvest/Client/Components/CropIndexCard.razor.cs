@@ -24,6 +24,7 @@ namespace HomeHarvest.Client.Components
        
         protected override void OnInitialized()
         {
+            //todo make sure this uses a token to access the storage
             ImgSource = $"https://homeharveststorage.blob.core.windows.net/upload-container/{Crop.PlotImage}";
             base.OnInitialized();
         }
@@ -42,7 +43,6 @@ namespace HomeHarvest.Client.Components
             else
             {
                 HideModal();
-                //todo tell the parent componet to refresh the page
                 await onDeleteSuccess.InvokeAsync();   
             }
       
