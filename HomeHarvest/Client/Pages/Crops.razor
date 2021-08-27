@@ -4,8 +4,13 @@
     <AddCrop onAdd="@LoadData" />
     <div class="row">
     @foreach(var crop in CropItems){
-       <CropIndexCard Crop="@crop" onDeleteSuccess="@LoadData"/>
+       <CropIndexCard Crop="@crop" DeleteCrop="@DeleteCrop"/>
 }
 </div>
+<Modal @ref="RemoveModal"  >
+    <RemoveCropModal ToRemove="ToRemove" ConfirmDelete="RemoveCrop"/> 
+</Modal>
 
+
+    
 

@@ -1,16 +1,20 @@
 ﻿@page "/sown/{id}"
-<h3>Sown</h3>
-<div class="flex ">
-	<div>
-		<DxDataGrid 	Data="@Crop.Sowed"
-	
-                RowUpdatingAsync="@OnRowUpdatingAsync"
-                RowRemovingAsync="@OnRowRemovingAsync" >
-		</DxDataGrid>
-	</div>
-	<div>
-	<img src="ImgSource">
-	</div>
+<h3>@Crop.LocationYear</h3>
+<div class="flex ">			
+		<Div class="col col-md-4">
+		<h2>Sown Plants</h2>
+		<ListGroup >
+				@foreach(var item in @Crop.Sowed)
+				{		
+                    <SownItemListCard SownItem="@item" onActionSuccess="@LoadData"/>
+				}
+		</ListGroup>
+		</Div>
+			<Div>
+				
+			</Div>
+
 </div>
+
 
 

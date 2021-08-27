@@ -11,12 +11,12 @@ namespace HomeHarvest.Server.Controllers
 	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
-	public class SowedController : ControllerBase
+	public class SownController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
-		private readonly ILogger<SowedController> _logger;
+		private readonly ILogger<SownController> _logger;
 		private readonly IMapper _mapper;
-		public SowedController(ApplicationDbContext context, ILogger<SowedController> logger, IMapper mapper)
+		public SownController(ApplicationDbContext context, ILogger<SownController> logger, IMapper mapper)
 		{
 			_context = context;
 			_logger = logger;

@@ -21,3 +21,15 @@
     word-wrap: break-word;
 }
 
+.StartEndAlignedText {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    
+}
+
+.JustifyContentEnd {
+    display: flex; 
+    justify-content: flex-end;
+    column-gap: 1em;
+}

@@ -27,7 +27,7 @@ namespace HomeHarvest.Client
 
 			// Supply HttpClient instances that include access tokens when making requests to the server project
 			builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("HomeHarvest.ServerAPI"));
-			builder.Services.AddDevExpressBlazor();
+			
 			builder.Services.AddApiAuthorization();
 			builder.Services.AddScoped<ICropRepository, CropRepository>();
 			builder.Services.AddScoped<ISownRepository, SownRepository>();
