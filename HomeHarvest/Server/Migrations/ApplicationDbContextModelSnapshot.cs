@@ -80,7 +80,7 @@ namespace HomeHarvest.Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CropId")
+                    b.Property<int>("CropId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlantId")
@@ -408,15 +408,19 @@ namespace HomeHarvest.Server.Migrations
 
             modelBuilder.Entity("HomeHarvest.Server.Entities.Sown", b =>
                 {
-                    b.HasOne("HomeHarvest.Server.Entities.Crop", null)
+                    b.HasOne("HomeHarvest.Server.Entities.Crop", "Crop")
                         .WithMany("Sowed")
-                        .HasForeignKey("CropId");
+                        .HasForeignKey("CropId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HomeHarvest.Server.Entities.Plant", "Plant")
-                        .WithMany("Sowns")
+                        .WithMany()
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Crop");
 
                     b.Navigation("Plant");
                 });
@@ -475,11 +479,6 @@ namespace HomeHarvest.Server.Migrations
             modelBuilder.Entity("HomeHarvest.Server.Entities.Crop", b =>
                 {
                     b.Navigation("Sowed");
-                });
-
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Plant", b =>
-                {
-                    b.Navigation("Sowns");
                 });
 #pragma warning restore 612, 618
         }

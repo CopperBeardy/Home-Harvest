@@ -25,7 +25,7 @@ namespace HomeHarvest.Server.Controllers
 
 		// GET: api/Sow
 		[HttpGet]
-		public async Task<ActionResult<List<SownDto>>> GetSown() => 
+		public async Task<ActionResult<List<SownDto>>> GetSown() =>
 			_mapper.Map<List<SownDto>>(await _context.Sowns.ToListAsync());
 
 		//// GET: api/Sow/5
@@ -49,34 +49,25 @@ namespace HomeHarvest.Server.Controllers
 		[HttpPut("{id}")]
 		public async Task<IActionResult> PutSow(int id, SownDto sow)
 		{
-			if (id != sow.Id)
-			{
-				return BadRequest();
-			}
-			
-
-			try
-			{var entity = _mapper.Map<Sown>(sow);
-			
+			bool savefailed;
+			var entity = _mapper.Map<Sown>(sow);
 			_context.Update(entity);
-				await _context.SaveChangesAsync();
-				_logger.LogInformation($"Sow object with Id {sow.Id} has been modified in the Db ");
-
-			}
-			catch (DbUpdateConcurrencyException ex)
+			do
 			{
-				if (!SowExists(id))
-				{
-					_logger.LogInformation($"Sow object with Id {sow.Id} was not found in Db ");
-					return NotFound();
+				savefailed = false;
+				try
+				{				
+					await _context.SaveChangesAsync();
+					_logger.LogInformation($"Sow object with Id {sow.Id} has been modified in the Db ");
 				}
-				else
+				catch (DbUpdateConcurrencyException ex)
 				{
-					_logger.LogError($"Sow object with Id {sow.Id} has been modified in the Db ", ex);
-					throw;
+					savefailed = true;
+					var entry = ex.Entries.Single();
+					entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+				
 				}
-			}
-
+			} while (savefailed);
 			return NoContent();
 		}
 

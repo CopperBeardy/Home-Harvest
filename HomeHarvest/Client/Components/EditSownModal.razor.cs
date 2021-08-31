@@ -11,6 +11,7 @@ namespace HomeHarvest.Client.Components
 		private IPlantRepository PlantRepository { get; set; }
 		[Inject]
 		private ISownRepository SownRepository { get; set; }
+	
 		[Parameter]
 		public Modal EditSownItemModal { get; set; }
 		[Parameter]

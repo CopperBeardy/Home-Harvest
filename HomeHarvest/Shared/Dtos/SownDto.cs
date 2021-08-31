@@ -11,7 +11,7 @@ namespace HomeHarvest.Shared.Dtos
 		/// <summary>
 		/// Plant that has been planted
 		/// </summary>
-		[Required(ErrorMessage = "You must select a type of plant")]
+
 		[JsonInclude]
 		public PlantDto Plant { get; set; }
 
@@ -22,9 +22,12 @@ namespace HomeHarvest.Shared.Dtos
 		[JsonInclude]
 		public DateTime PlantedOn { get; set; }
 		
-		
-
 		[ForeignKey(nameof(Plant))]
 		public int PlantId { get; set; }
+
+		[JsonIgnore]
+		public  CropDto Crop { get; set; }
+		[ForeignKey(nameof(Crop))]
+		public int CropId { get; set; }
 	}
 }

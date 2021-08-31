@@ -11,12 +11,18 @@ namespace HomeHarvest.Server.Entities
 		/// Plant that has been planted
 		/// </summary>
 		[Required(ErrorMessage = "You must select a type of plant")]
-		public Plant Plant { get; set; }
+		public  Plant Plant { get; set; }
 
 		[Required(ErrorMessage = "The date you sowed this plant is required")]
 		public DateTime PlantedOn { get; set; }
 
 		[ForeignKey(nameof(Plant))]
 		public int PlantId { get; set; }
+
+		
+		public Crop Crop { get; set; }
+		[ForeignKey(nameof(Crop))]
+		public int CropId { get; set; }
+
 	}
 }

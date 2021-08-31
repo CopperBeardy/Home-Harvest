@@ -24,9 +24,5 @@ namespace HomeHarvest.Server.Entities
 		/// </summary>
 		[Required(ErrorMessage = "Length of time for flowering or Grow time is required")]
 		public double GrowInWeeks { get; set; }
-
-	
-
-
 	}
 }

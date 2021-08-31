@@ -24,6 +24,7 @@ namespace HomeHarvest.Server.Entities
 		/// <summary>
 		/// Collection of plants that were planted in the crop year
 		/// </summary>
+		/// 
 		public virtual ICollection<Sown> Sowed { get; set; }
 	}
 }
