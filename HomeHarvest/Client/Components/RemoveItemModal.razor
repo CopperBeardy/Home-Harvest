@@ -1,0 +1,35 @@
+﻿<Modal @ref="RemoveModal"  >
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Delete  @Item.Description ?</ModalTitle>
+         
+        </ModalHeader>
+        <ModalBody>
+            <Text> Performing this action will permentaly remove it. 
+            </Text>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@Cancel">Cancel</Button>
+            <Button Color="Color.Danger" Clicked="@Delete">Confirm</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter]
+    public RemoveItem Item { get; set; }
+    public Modal RemoveModal { get; set; }
+    [Parameter]
+    public EventCallback<RemoveItem> ConfirmDelete { get; set; }
+
+    private void Cancel()
+    {
+        Item.Delete = false;
+        ConfirmDelete.InvokeAsync(Item);
+    }
+    private void Delete()
+    {
+        Item.Delete = true;
+        ConfirmDelete.InvokeAsync(Item);  
+ }
+    }

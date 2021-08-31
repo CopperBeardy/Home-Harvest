@@ -1,6 +1,7 @@
-
 using Blazorise;
+using HomeHarvest.Client.Components;
 using HomeHarvest.Client.HttpRepositories;
+using HomeHarvest.Client.Models;
 using HomeHarvest.Shared.Dtos;
 using Microsoft.AspNetCore.Components;
 
@@ -11,48 +12,40 @@ namespace HomeHarvest.Client.Pages
 		[Inject]
 		ICropRepository CropRepository { get; set; }
 		IEnumerable<CropDto> CropItems { get; set; } = new List<CropDto>();
-		private Modal RemoveModal;
-		public string ToRemove;
-		public int IdToRemove= -1;
-		
+		 RemoveItemModal DeleteCropModal { get; set; }
+		public RemoveItem CurrentItem { get; set; } = new();
+			
 		protected override async Task OnInitializedAsync()
 		{
-			await LoadData();
-			await InvokeAsync(StateHasChanged);
+			await LoadData();	
 		}
-		
+
+		/// <summary>
+		/// Open the modal to confirm request to delete items
+		/// </summary>
+		/// <param name=""="id"></param>
 		public void DeleteCrop(int id)
 		{
-			IdToRemove = id;
-			ToRemove = CropItems.FirstOrDefault(c => c.Id == id).LocationYear;
-			RemoveModal.Show();			
+			CurrentItem.Id = id;
+			CurrentItem.Description = CropItems.FirstOrDefault(c => c.Id == id).LocationYear;
+			 DeleteCropModal.RemoveModal.Show();		
 		}
 	
-		private async Task RemoveCrop(bool remove)
+		private async Task RemoveCrop()
 		{
-			if (remove)
+			if (CurrentItem.Delete)
 			{
-				var result = await CropRepository.Delete(IdToRemove);
-				if (!result)
-				{
-					//todo display problem on the modal over why deletion failed
-
-				}
-				else
-				{
-					await LoadData();
-				}
+				await CropRepository.Delete(CurrentItem.Id);
+				await LoadData();			
 			}
-			IdToRemove = -1;
-			RemoveModal.Hide();
+			CurrentItem = new();
+			DeleteCropModal.RemoveModal.Hide();
 		}
+
 		public async Task LoadData()
 		{
 			CropItems = await CropRepository.GetAll();
 			await InvokeAsync(StateHasChanged);
 		}
-
-
-		
 	}
 }

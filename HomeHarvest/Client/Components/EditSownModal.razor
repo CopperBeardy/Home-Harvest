@@ -1,0 +1,27 @@
+﻿<Modal @ref="EditSownItemModal">
+	<ModalContent Centered="true">
+		<ModalHeader>
+			<ModalTitle><Icon Name="IconName.Edit" />Edit</ModalTitle>
+		</ModalHeader>			
+		<ModalBody>			
+			<Field Horizontal="true">
+				<FieldLabel>Plant Name</FieldLabel>
+				<Select TValue="int"   @bind-SelectedValue="@SelectedPlantId">
+					@foreach(var plant in Plants)
+					{
+						<SelectItem Value=@plant.Id>@plant.Name</SelectItem>
+					}
+				</Select>
+			</Field>
+			<Field>
+				<FieldLabel>Planted on</FieldLabel>
+				<DateEdit TValue="DateTime"  @bind-Date="@SownItem.PlantedOn" />
+			</Field>
+		</ModalBody>
+		<ModalFooter>
+			<Button Color="Color.Secondary" Clicked="@Cancel">Cancel</Button>
+            <Button Color="Color.Danger" Type="ButtonType.Submit" Clicked="@SaveChanges">Confirm</Button>    
+		</ModalFooter>
+	</ModalContent>
+</Modal>
+

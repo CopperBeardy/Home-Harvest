@@ -6,15 +6,16 @@
 		<ListGroup >
 				@foreach(var item in @Crop.Sowed)
 				{		
-                    <SownItemListCard SownItem="@item" onActionSuccess="@LoadData"/>
+                    <SownItemListCard SownItem="@item" DeleteSown="@DeleteSown" EditSown="@OpenEditModal"/>
 				}
 		</ListGroup>
 		</Div>
 			<Div>
-				
+				@*image of the plot location*@
 			</Div>
-
 </div>
+   <RemoveItemModal @ref="DeleteSownModal" Item="@ItemToRemove" ConfirmDelete="RemoveSown"/> 
+   <EditSownModal @ref="EditModal" SownItem="EditItem" CloseModal="@CloseEditModal" /> 
 
 
 

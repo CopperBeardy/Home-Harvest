@@ -9,54 +9,32 @@
                                 <Span>Harvest: @SownItem.PlantedOn.AddDays(SownItem.Plant.GrowInWeeks * 7).ToShortDateString()</Span>
                                 </Div> 
                                 <Div>
-                                    <Button  Color="Color.Primary" >Edit</Button>
-                                    <Button  Color="Color.Danger" Clicked="@ShowDeleteModal" ><Icon Name="@("fas fa-times")" /></Button>
+                                    <Button  Color="Color.Primary" Clicked="@EditSownItem">Edit</Button>
+                                    <Button  Color="Color.Danger" Clicked="@DeleteSownItem" ><Icon Name="@("fas fa-times")" /></Button>
                                </Div>
                         </Div>
                    </ListGroupItem>
-                   </Div>
-                   <Modal @ref="modalRef">
-    <ModalContent Centered="true">
-        <ModalHeader>
-            <ModalTitle>Remove Plant Plant.Name PlantedOn ?</ModalTitle>
-            <CloseButton />
-        </ModalHeader>
-        <ModalBody>
-            <Text> Performing this action will permentaly remove Plant from this crop. 
-            </Text>         
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="@HideDeleteModal">Cancel</Button>
-            <Button Color="Color.Danger" Clicked="@RemovePlant">Confirm</Button>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
+ </Div>
+       
 @code {
     [Parameter]
     public SownDto SownItem{get;set;}
+    [Parameter]    
+    public EventCallback<int> DeleteSown { get; set; }
+     [Parameter]    
+    public EventCallback<int> EditSown { get; set; }
     private string ItemGenus ;
-    private Modal modalRef;
-  	private void ShowDeleteModal() => modalRef.Show();
-	private void HideDeleteModal() => modalRef.Hide();
-       [Parameter]
-        public EventCallback<bool> onActionSuccess { get; set; }
+
+    
     protected override void OnInitialized()
     {     
         ItemGenus = Enum.GetName(typeof(Genus), SownItem.Plant.Genus);    
         base.OnInitialized();
     }
- 	private async Task RemovePlant()
-        {     
-            var result = await SownRepository.Delete(SownItem.Id);
-            if (!result)
-            {
-            //todo display problem on the modal over why deletion failed
-                
-            }
-            else
-            {
-                HideDeleteModal();
-                await onActionSuccess.InvokeAsync();   
-            }
-        }
+
+    private async Task DeleteSownItem() =>
+        await DeleteSown.InvokeAsync(SownItem.Id);
+    private async Task EditSownItem() =>
+    await EditSown.InvokeAsync(SownItem.Id);
+
 }

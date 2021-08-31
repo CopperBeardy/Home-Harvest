@@ -25,7 +25,7 @@ namespace HomeHarvest.Shared.Dtos
 		[Required(ErrorMessage = "Length of time for flowering or Grow time is required")]
 		public double GrowInWeeks { get; set; }
 
-
+	
 
 	}
 }

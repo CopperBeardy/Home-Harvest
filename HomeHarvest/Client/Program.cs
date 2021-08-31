@@ -31,7 +31,8 @@ namespace HomeHarvest.Client
 			builder.Services.AddApiAuthorization();
 			builder.Services.AddScoped<ICropRepository, CropRepository>();
 			builder.Services.AddScoped<ISownRepository, SownRepository>();
-			await builder.Build().RunAsync();
+            builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+            await builder.Build().RunAsync();
 		}
 	}
 }

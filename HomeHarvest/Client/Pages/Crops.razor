@@ -7,9 +7,9 @@
        <CropIndexCard Crop="@crop" DeleteCrop="@DeleteCrop"/>
 }
 </div>
-<Modal @ref="RemoveModal"  >
-    <RemoveCropModal ToRemove="ToRemove" ConfirmDelete="RemoveCrop"/> 
-</Modal>
+
+   <RemoveItemModal @ref="DeleteCropModal" Item="@CurrentItem" ConfirmDelete="RemoveCrop"/> 
+
 
 
     

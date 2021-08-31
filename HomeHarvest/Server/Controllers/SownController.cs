@@ -53,11 +53,12 @@ namespace HomeHarvest.Server.Controllers
 			{
 				return BadRequest();
 			}
-			var entity = _mapper.Map<Sown>(sow);
-			_context.Sowns.Update(entity);
+			
 
 			try
-			{
+			{var entity = _mapper.Map<Sown>(sow);
+			
+			_context.Update(entity);
 				await _context.SaveChangesAsync();
 				_logger.LogInformation($"Sow object with Id {sow.Id} has been modified in the Db ");
 

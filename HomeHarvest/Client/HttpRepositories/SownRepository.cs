@@ -15,6 +15,8 @@ namespace HomeHarvest.Client.HttpRepositories
 		}
 		public async Task<List<SownDto>> GetAll() =>
 		await _httpClient.GetFromJsonAsync<List<SownDto>>($"api/Sown");
+		public async Task<SownDto> Get(int id) =>
+	await _httpClient.GetFromJsonAsync<SownDto>($"api/Sown/{id}");
 
 		public async Task<bool> Create(CreateSownDto Sow) =>
 			 (await _httpClient.PostAsJsonAsync("api/Sown", Sow)).IsSuccessStatusCode;

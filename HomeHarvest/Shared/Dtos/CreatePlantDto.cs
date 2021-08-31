@@ -2,12 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HomeHarvest.Server.Entities
+namespace HomeHarvest.Shared.Dtos
 {
-	public class Plant
+	public class CreatePlantDto
 	{
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Id { get; set; }
+	
 
 		/// <summary>
 		/// Type of plant 
@@ -25,7 +24,6 @@ namespace HomeHarvest.Server.Entities
 		[Required(ErrorMessage = "Length of time for flowering or Grow time is required")]
 		public double GrowInWeeks { get; set; }
 
-	
 
 
 	}
