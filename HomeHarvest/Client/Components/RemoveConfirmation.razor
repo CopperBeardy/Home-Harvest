@@ -1,0 +1,14 @@
+﻿<div>
+    <p>Performing this action will permentaly remove it. </p>
+</div>
+<div>  <button class="btn btn-secondary" @onclick="@Cancel">Cancel</button>
+            <button class="btn btn-danger" @onclick="@Delete">Confirm</button>
+</div>
+
+@code {
+    [CascadingParameter] 
+    BlazoredModalInstance ModalInstance {get;set;}  
+
+    void Cancel() => ModalInstance.CancelAsync();
+    void Delete() => ModalInstance.CloseAsync(ModalResult.Ok("success"));
+}

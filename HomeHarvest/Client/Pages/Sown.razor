@@ -1,21 +1,33 @@
-﻿@page "/sown/{id}"
+﻿
+@page "/sown/{id}"
 <h3>@Crop.LocationYear</h3>
 <div class="flex ">			
 		<Div class="col col-md-4">
 		<h2>Sown Plants</h2>
 		<ListGroup >
 				@foreach(var item in @Crop.Sowed)
-				{		
-                    <SownItemListCard SownItem="@item" DeleteSown="@DeleteSown" EditSown="@OpenEditModal"/>
-				}
+			{
+				<div Class="mt-1" >
+					<ListGroupItem>
+                        <Heading >@item.Plant.Name (@Enum.GetName(typeof(Genus), item.Plant.Genus))</Heading>
+                        <div Flex="Flex.JustifyContent.Between">
+                            <div>
+                                <span>Planted: @item.PlantedOn.ToShortDateString()</span>
+                                <span>Harvest: @item.PlantedOn.AddDays(item.Plant.GrowInWeeks * 7).ToShortDateString()</span>
+                                </Div> 
+                                <div>
+                                    <button class="btn btn-primary"  @onclick="@(() => EditSownItem(item))">Edit</button>
+                                    <button  class="btn btn-danger" @onclick="@(() => RemoveSown(item))" ><Icon Name="@("fas fa-times")" /></button>
+                               </div>
+                        </div>
+                   </ListGroupItem>
+ </div>
+			}
 		</ListGroup>
 		</Div>
 			<Div>
 				@*image of the plot location*@
 			</Div>
 </div>
-   <RemoveItemModal @ref="DeleteSownModal" Item="@ItemToRemove" ConfirmDelete="RemoveSown"/> 
-   <EditSownModal @ref="EditModal" SownItem="EditItem" CloseModal="@CloseEditModal" /> 
-
 
 

@@ -32,7 +32,7 @@ namespace HomeHarvest.Server
 				.AllowAnyMethod()
 				.WithExposedHeaders("X-Pagination"));
 			});
-			services.Configure<BlobContainerConnection>(Configuration.GetSection("BlobContainerConnection"));
+			services.Configure<BlobContainerConnection>(Configuration.GetSection(nameof(BlobContainerConnection)));
 			services.AddAutoMapper(typeof(Startup));
 			services.AddScoped<IBlobService, BlobService>();
 			services.AddDatabaseDeveloperPageExceptionFilter();

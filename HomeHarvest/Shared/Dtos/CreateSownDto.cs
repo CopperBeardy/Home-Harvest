@@ -18,5 +18,7 @@ namespace HomeHarvest.Shared.Dtos
 		public double GrowWeeks { get; set; }
 
 
+		public int CropId { get; set; }
+
 	}
 }

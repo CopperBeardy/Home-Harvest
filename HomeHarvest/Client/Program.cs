@@ -1,3 +1,4 @@
+using Blazored.Modal;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -23,7 +24,7 @@ namespace HomeHarvest.Client
 				})
 				.AddBootstrapProviders()
 				.AddFontAwesomeIcons();
-
+			builder.Services.AddBlazoredModal();
 
 			// Supply HttpClient instances that include access tokens when making requests to the server project
 			builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("HomeHarvest.ServerAPI"));

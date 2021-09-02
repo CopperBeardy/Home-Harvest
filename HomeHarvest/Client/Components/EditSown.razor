@@ -1,0 +1,23 @@
+﻿<EditForm Model=@Sown OnValidSubmit="SaveChanges" >
+	<p>
+		<label>
+			PlantName : 
+			<InputSelect @bind-Value="Sown.PlantId">
+				@foreach(var plant in Plants)
+					{
+						<option value=@plant.Id>@plant.Name</option>
+					}
+            </InputSelect>
+        </label>
+    </p>
+	<p>
+		<label>
+			Planted on:
+			<InputDate @bind-Value="Sown.PlantedOn"/>
+        </label>
+    </p>
+	<p>
+			<button class="btn btn-secondary" @onclick="@Cancel">Cancel</button>
+            <button class="btn btn-warning"  type="submit"  >Confirm</button>    	
+    </p>
+</EditForm>

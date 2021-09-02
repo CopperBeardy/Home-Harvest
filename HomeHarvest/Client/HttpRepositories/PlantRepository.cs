@@ -14,6 +14,7 @@ namespace HomeHarvest.Client.HttpRepositories
             _httpClient = _factory.CreateClient("HomeHarvest.ServerAPI");
         }
         public async Task<List<PlantDto>> GetAll() =>
+            
         await _httpClient.GetFromJsonAsync<List<PlantDto>>($"api/Plant");
 
         public async Task<bool> Create(CreatePlantDto plant) =>
