@@ -1,26 +1,26 @@
 ﻿<div class="mb-2">
 	@if (!ShowInputControls)
 	{
-		<Button class="btn btn-primary" Clicked="@ShowForm" >Add Crop</Button>
+		<button class="btn btn-primary" @onclick="@ShowForm" >Add Crop</button>
 	}
 	else
 	{
-		<Form Model="@Crop" @onsubmit="@HandleValidSubmit">		
-			<Div Class="HorizontalForm ">
-				<Div Class="HorizontalForm-item " >				
-					<Field >					
-						<TextEdit Placeholder="Enter Plot Name" @bind-Text="@Crop.Location" />
-					</Field>
-				</Div>
+		<EditForm Model="Crop" OnValidSubmit="HandleValidSubmit">		
+			<div class="HorizontalForm">
+				<div class="HorizontalForm-item " id="CenteredItems">				
+					<span >					
+						<InputText Placeholder="Enter Plot Name" @bind-Value="@Crop.Location" />
+					</span>
+					</div>
 				
-				<Div Class="HorizontalForm-item" id="CenteredItems">
+				<div class="HorizontalForm-item" id="CenteredItems">
 					<InputFile OnChange="@HandleSelected" />
-				</Div>
-				<Div Class="HorizontalForm-item">
-					<Button Class="btn btn-primary" Type="ButtonType.Submit" >Add</Button>
-					<Button Class="btn btn-secondary"  Clicked="@ShowForm" >Cancel</Button>
-				</Div>
-			</Div>
-		</Form>
+				</div>
+				<div class="HorizontalForm-item">
+					<button class="btn btn-primary" Type="Submit" >Add</button>
+					<button class="btn btn-secondary"  @onclick="@ShowForm" >Cancel</button>
+				</div>
+			</div>
+		</EditForm>
 	}
 </div>

@@ -1,6 +1,24 @@
-﻿@page "/plants/{cropId}"
+﻿@page "/plants"
+
 <h3>Plants</h3>
+<Button Class="mb-1" Color="Color.Primary" Clicked="ShowAddPlantModal" >Add New</Button>
+<div class="row">
+    @foreach (var plant in AllPlants)
+    {
+        <div class="col col-md-2 mb-1">
+            <Card>
+                <CardBody>
+                    <CardTitle Size="5">@plant.Name</CardTitle>
+                    <CardBody >
+                        <Label>Type of Plant:  @plant.Genus.ToString()</Label>
+                        <Label>Grow Time: @plant.GrowInWeeks</Label>
+                    </CardBody> 
+                    <Button class="mt-1" Color="Color.Primary" Clicked="@(() => ShowEditPlantModal(plant))">Edit</Button>
+                </CardBody>
+            </Card>
+        </div>
+    }
+</div>
 
-@code{
 
-}
+

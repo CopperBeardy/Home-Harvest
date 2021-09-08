@@ -23,11 +23,13 @@ namespace HomeHarvest.Shared.Dtos
 		public string LocationYear => $"{Location}, {Year}";
 		public string PlotImage { get; set; }
 
+		public byte[] Image { get; set; }
 		/// <summary>
 		/// Collection of plants that were planted in the crop year
 		/// </summary>
 
 		[JsonInclude]
 		public  List<SownDto> Sowed { get; set; } 
+
 	}
 }

@@ -26,60 +26,68 @@ namespace HomeHarvest.Server.Controllers
 		// GET: api/Sow
 		[HttpGet]
 		public async Task<ActionResult<List<SownDto>>> GetSown() =>
-			_mapper.Map<List<SownDto>>(await _context.Sowns.ToListAsync());
-
-		//// GET: api/Sow/5
+			_mapper.Map<List<SownDto>>(await _context.Sowns.AsNoTracking().ToListAsync());
+			
 		[HttpGet("{id}")]
 		public async Task<ActionResult<SownDto>> GetSow(int id)
 		{
-			var sow = await _context.Sowns
+			if (SowExists(id))
+			{
+				var sow = await _context.Sowns
+					  .AsNoTracking()
 				.Include(p => p.Plant)
-				.FirstOrDefaultAsync(x => x.Id.Equals(id));
-
-			if (sow == null)
+				.FirstOrDefaultAsync(x => x.Id.Equals(id)); return _mapper.Map<SownDto>(sow);
+			}
+			else
 			{
 				return NotFound();
 			}
-
-			return _mapper.Map<SownDto>(sow);
 		}
 
-		// PUT: api/Sow/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
-		public async Task<IActionResult> PutSow(int id, SownDto sow)
+	[HttpPut]
+		public async Task<IActionResult> PutSow(SownDto sow)
 		{
-			bool savefailed;
+		
 			var entity = _mapper.Map<Sown>(sow);
 			_context.Update(entity);
-			do
-			{
-				savefailed = false;
-				try
-				{				
-					await _context.SaveChangesAsync();
-					_logger.LogInformation($"Sow object with Id {sow.Id} has been modified in the Db ");
-				}
-				catch (DbUpdateConcurrencyException ex)
-				{
-					savefailed = true;
-					var entry = ex.Entries.Single();
-					entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+	
+     
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation($"Sow object with Id {sow.Id} has been modified in the Db ");
+                }
+                catch (Exception ex)
+                {
+                
+					_logger.LogError($"Sow object with Id {sow.Id} has encountered a update concurrencyException", ex);
+
 				
-				}
-			} while (savefailed);
-			return NoContent();
+                }
+          
+            return NoContent();
 		}
 
 		// POST: api/Sow
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult> PostSow(CreateSownDto sow)
-		{
-			var entity = _mapper.Map<Sown>(sow);
-			_context.Sowns.Add(entity);
-			await _context.SaveChangesAsync();
-			return Ok();
+		public async Task<ActionResult> PostSow(SownDto sow)
+        {
+            try
+            {
+                var entity = _mapper.Map<Sown>(sow);
+                _context.Sowns.Add(entity);
+                await _context.SaveChangesAsync();
+				_logger.LogInformation($"New Sown item with Id {sow.Id} has been added to the Db ");
+
+				return Ok();
+            }
+            catch (Exception ex)
+            {
+				_logger.LogError($"Exception occured try to insert {sow.Plant},{sow.PlantedOn} to dataase: {ex}");
+				throw new Exception("Exception occured ", ex);
+
+			}
 		}
 
 		// DELETE: api/Sow/5
@@ -89,14 +97,15 @@ namespace HomeHarvest.Server.Controllers
 			var sow = await _context.Sowns.FindAsync(id);
 			if (sow == null)
 			{
+				_logger.LogError($"Sown with {id} could not be found");
 				return NotFound();
 			}
 
 			_context.Sowns.Remove(sow);
 			await _context.SaveChangesAsync();
 			_logger.LogInformation($"Sow item with Id {id} has been removed Db ");
-
-			return NoContent();
+			return Ok();
+	
 		}
 
 		private bool SowExists(int id) => _context.Sowns.Any(e => e.Id == id);

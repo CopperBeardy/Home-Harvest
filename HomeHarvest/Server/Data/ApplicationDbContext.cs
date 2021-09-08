@@ -9,29 +9,14 @@ using System.Diagnostics;
 namespace HomeHarvest.Server.Data
 {
 	public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
-	{
-		public static readonly string RowVersion = nameof(RowVersion);
-		public static readonly string DataDb = nameof(DataDb).ToLower();
-
+	{	
 		public ApplicationDbContext(
 			DbContextOptions options,
 			IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
 		{
 			Debug.WriteLine($"{ContextId} context created");
 		}
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<Crop>()
-			   .Property<byte[]>(RowVersion)
-			   .IsRowVersion();
-			modelBuilder.Entity<Sown>()
-			   .Property<byte[]>(RowVersion)
-			   .IsRowVersion();
-			modelBuilder.Entity<Plant>()
-			   .Property<byte[]>(RowVersion)
-			   .IsRowVersion();
-			base.OnModelCreating(modelBuilder);
-		}
+		
 		public DbSet<Crop> Crops { get; set; }
 		public DbSet<Sown> Sowns { get; set; }
 		public DbSet<Plant> Plants { get; set; }

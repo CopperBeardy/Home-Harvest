@@ -1,5 +1,5 @@
-﻿@inject IPlantRepository PlantRepository
-@inject ISownRepository SownRepository
+﻿@inject  PlantManager PlantManager
+@inject  SownManager SownManager
 
 <h3>AddSown</h3>
 
@@ -10,28 +10,24 @@
     [Parameter]
     public string CropId {get;set;}
 
-    public CreateSownDto newSown = new();
+    public SownDto newSown = new();
 
     public IEnumerable<PlantDto> Plants { get; set; } = new List<PlantDto>();
 
     protected override Task OnInitializedAsync()
-    {
-       
+    {       
         _ = LoadPlants();
         return base.OnInitializedAsync();
     }
 
-    public async Task LoadPlants() =>Plants =  await PlantRepository.GetAll();    
+    public async Task LoadPlants() =>Plants =  await PlantManager.GetAll();    
     
     void Cancel() => ModalInstance.CancelAsync();
 
     public async Task HandleValidSubmit()
     {
          newSown.CropId = int.Parse(CropId);
-        var result = await SownRepository.Create(newSown);        
-        if(result)
-        {
-              await ModalInstance.CloseAsync(ModalResult.Ok("succees"));
-        }      
+        await SownManager.Insert(newSown);   
+        await ModalInstance.CloseAsync(ModalResult.Ok("succees"));
     }
 }

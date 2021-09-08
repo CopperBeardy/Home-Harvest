@@ -1,0 +1,57 @@
+﻿@inject PlantManager PlantManager
+
+<Form >  
+        <p>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel>Plant Name</AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @bind-Text="@Plant.Name" Placeholder="Enter plants name"></TextEdit> 
+             </Addon>
+        </Addons> 
+        </p>
+  <p>
+   <Addons>
+       <Addon AddonType="AddonType.Start">
+           <AddonLabel>Plant Genus</AddonLabel>
+       </Addon>
+        <Addon AddonType="AddonType.Body" > 
+            <Select TValue="Genus" @bind-SelectedValue="@Plant.Genus" >
+           @foreach(var genus in Enum.GetValues(typeof(Genus)))
+            {                
+                <SelectItem Value="@genus">@genus</SelectItem>
+            } 
+        </Select>
+        </Addon>
+   </Addons>
+   </p>
+   <p>
+    <Addons>
+       <Addon AddonType="AddonType.Start">
+                  <AddonLabel>Grow time in weeks</AddonLabel>
+       </Addon>
+        <Addon AddonType="AddonType.Body">
+            <NumericEdit @bind-Value="@Plant.GrowInWeeks" />
+        </Addon>
+   </Addons>
+   </p>
+       <div class="d-flex flex-row-reverse justify-content-between">
+            		<Button Color="Color.Success" Type="ButtonType.Submit" Clicked="HandleValidSubmit">Add</Button>
+					<Button Color="Color.Secondary"  Clicked="@Cancel" >Cancel</Button>
+        </div>
+</Form>
+@code {
+
+    [CascadingParameter]
+    BlazoredModalInstance ModalInstance { get; set; }
+    PlantDto Plant { get; set; } = new();
+
+      async Task Cancel() => await ModalInstance.CancelAsync();
+    
+    public async Task HandleValidSubmit()
+    {
+        await PlantManager.Insert(Plant);
+        await ModalInstance.CloseAsync(ModalResult.Ok(Plant));
+    }
+}

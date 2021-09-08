@@ -23,87 +23,79 @@ namespace HomeHarvest.Server.Controllers
 			_mapper = mapper;
 		}
 
-		// GET: api/Plant
 		[HttpGet]
 		public async Task<ActionResult<List<PlantDto>>> GetPlants() => 
 			_mapper.Map<List<PlantDto>>(await _context.Plants.ToListAsync());
 
-		//// GET: api/Plant/5
+
 		[HttpGet("{id}")]
 		public async Task<ActionResult<PlantDto>> GetPlant(int id)
-		{
-			var plant = await _context.Plants				
-				.FirstOrDefaultAsync(x => x.Id.Equals(id));
-
-			if (plant == null)
+		{		
+			if (PlantExists(id))
 			{
-				return NotFound();
+				var plant = await _context.Plants				
+				.FirstOrDefaultAsync(x => x.Id.Equals(id));
+				return _mapper.Map<PlantDto>(plant);
 			}
-
-			return _mapper.Map<PlantDto>(plant);
+            else
+            {	
+				_logger.LogError($"plant with {id} could not be found");
+				return NotFound();
+            }
 		}
 
-		// PUT: api/Plant/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
-		public async Task<IActionResult> PutPlant (int id, PlantDto plant)
+		[HttpPut]
+		public async Task<IActionResult> PutPlant (PlantDto plant)
 		{
-			if (id != plant.Id)
-			{
-				return BadRequest();
-			}
 			var entity = _mapper.Map<Plant>(plant);
-			_context.Plants.Update(entity);
-
-			try
-			{
-				await _context.SaveChangesAsync();
-				_logger.LogInformation($"Plant object with Id {plant.Id} has been modified in the Db ");
-
-			}
-			catch (DbUpdateConcurrencyException ex)
-			{
-				if (!PlantExists(id))
+			_context.Update(entity);
+	
+				try
 				{
-					_logger.LogInformation($"Plant object with Id {plant.Id} was not found in Db ");
-					return NotFound();
+					await _context.SaveChangesAsync();
+					_logger.LogInformation($"Plant object with Id {plant.Id} has been modified in the Db ");
 				}
-				else
+				catch (Exception ex)
 				{
-					_logger.LogError($"Plant object with Id {plant.Id} has been modified in the Db ", ex);
-					throw;
+					
+					_logger.LogError($"Plant object with Id {plant.Id} has encountered a update concurrencyException", ex);
 				}
-			}
-
+		
 			return NoContent();
 		}
 
-		// POST: api/Plant
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+	
 		[HttpPost]
-		public async Task<ActionResult> PostPlant(CreatePlantDto plant)
-		{
-			var entity = _mapper.Map<Plant>(plant);
-			_context.Plants.Add(entity);
-			await _context.SaveChangesAsync();
-			return Ok();
+		public async Task<ActionResult> PostPlant(PlantDto plant)
+        {
+            try
+            {
+                var entity = _mapper.Map<Plant>(plant);
+                _context.Plants.Add(entity);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+			catch (Exception ex)
+			{
+				_logger.LogError($"Exception occured trying to insert {plant.Name} to dataase: {ex}");
+				throw new Exception("Exception occured ", ex);
+			}
 		}
 
-		// DELETE: api/Plant/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeletePlant(int id)
 		{
 			var plant = await _context.Plants.FindAsync(id);
 			if (plant == null)
 			{
+				_logger.LogError($"Plant with {id} could not be found");
 				return NotFound();
 			}
 
 			_context.Plants.Remove(plant);
 			await _context.SaveChangesAsync();
 			_logger.LogInformation($"Plant item with Id {id} has been removed Db ");
-
-			return NoContent();
+			return Ok();
 		}
 
 		private bool PlantExists(int id) => _context.Plants.Any(e => e.Id == id);

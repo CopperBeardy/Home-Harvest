@@ -2,7 +2,7 @@ using Blazored.Modal;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-using HomeHarvest.Client.HttpRepositories;
+using HomeHarvest.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -17,22 +17,23 @@ namespace HomeHarvest.Client
 
 			builder.Services.AddHttpClient("HomeHarvest.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
 				.AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
-			builder.Services
-				.AddBlazorise(options =>
-				{
-					options.ChangeTextOnKeyPress = true;
-				})
-				.AddBootstrapProviders()
-				.AddFontAwesomeIcons();
+	
 			builder.Services.AddBlazoredModal();
-
+			builder.Services
+   .AddBlazorise(options =>
+   {
+	   options.ChangeTextOnKeyPress = true;
+   })
+   .AddBootstrapProviders()
+   .AddFontAwesomeIcons();
 			// Supply HttpClient instances that include access tokens when making requests to the server project
 			builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("HomeHarvest.ServerAPI"));
 			
 			builder.Services.AddApiAuthorization();
-			builder.Services.AddScoped<ICropRepository, CropRepository>();
-			builder.Services.AddScoped<ISownRepository, SownRepository>();
-            builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+	
+            builder.Services.AddScoped<CropManager>();
+            builder.Services.AddScoped<SownManager>();  
+            builder.Services.AddScoped<PlantManager>();
             await builder.Build().RunAsync();
 		}
 	}

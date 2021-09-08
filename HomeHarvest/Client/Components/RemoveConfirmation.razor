@@ -1,8 +1,10 @@
-﻿<div>
+﻿
     <p>Performing this action will permentaly remove it. </p>
-</div>
-<div>  <button class="btn btn-secondary" @onclick="@Cancel">Cancel</button>
-            <button class="btn btn-danger" @onclick="@Delete">Confirm</button>
+
+<div class="d-flex flex-row-reverse justify-content-between">
+    <Button Color="Color.Danger"  Clicked="@Delete">Confirm</Button>
+    <Button Color="Color.Secondary"  Clicked="@Cancel">Cancel</Button>
+   
 </div>
 
 @code {

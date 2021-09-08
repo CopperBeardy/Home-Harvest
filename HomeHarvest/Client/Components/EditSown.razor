@@ -1,23 +1,31 @@
-﻿<EditForm Model=@Sown OnValidSubmit="SaveChanges" >
+﻿<Form  >
 	<p>
-		<label>
-			PlantName : 
-			<InputSelect @bind-Value="Sown.PlantId">
+		<Addons>
+			<Addon AddonType="AddonType.Start">
+				<AddonLabel>PlantName</AddonLabel>
+            </Addon>
+			<Addon AddonType="AddonType.Body">
+				<Select  @bind-SelectedValue="@PlantId">
 				@foreach(var plant in Plants)
 					{
-						<option value=@plant.Id>@plant.Name</option>
+						<SelectItem Value=@plant.Id>@plant.Name</SelectItem>
 					}
-            </InputSelect>
-        </label>
-    </p>
-	<p>
-		<label>
-			Planted on:
-			<InputDate @bind-Value="Sown.PlantedOn"/>
-        </label>
-    </p>
-	<p>
-			<button class="btn btn-secondary" @onclick="@Cancel">Cancel</button>
-            <button class="btn btn-warning"  type="submit"  >Confirm</button>    	
-    </p>
-</EditForm>
+            </Select>
+			</Addon>
+        </Addons>
+		</p>
+		<p>
+		<Addons>
+			<Addon AddonType="AddonType.Start">
+				<AddonLabel>Planted on:</AddonLabel>
+            </Addon>
+			<Addon AddonType="AddonType.Body">
+				<DateEdit TValue="DateTime" @bind-Date="@PlantedOn" />
+            </Addon>
+        </Addons>
+		</p>	
+	<div class="d-flex flex-row-reverse justify-content-between">    
+		<Button  Color="Color.Warning"  Clicked="SaveChanges">Confirm</Button>
+		<Button Color="Color.Secondary" Clicked="@Cancel">Cancel</Button>
+    </div>
+</Form>
