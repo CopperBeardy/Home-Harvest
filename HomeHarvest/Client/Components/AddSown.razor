@@ -1,33 +1,63 @@
 ﻿@inject  PlantManager PlantManager
 @inject  SownManager SownManager
 
-<h3>AddSown</h3>
+<Form  >
+	<p>
+		<Addons>
+			<Addon AddonType="AddonType.Start">
+				<AddonLabel>PlantName</AddonLabel>
+            </Addon>
+			<Addon AddonType="AddonType.Body">
+				<Select TValue="int" SelectedValue="@Sown.PlantId" SelectedValueChanged="@PlantValueChanged">
+				@foreach(var plant in Plants)
+					{
+						<SelectItem Value=@plant.Id>@plant.Name</SelectItem>
+					}
+            </Select>
+			</Addon>
+        </Addons>
+		</p>
+		<p>
+		<Addons>
+			<Addon AddonType="AddonType.Start">
+				<AddonLabel>Planted on:</AddonLabel>
+            </Addon>
+			<Addon AddonType="AddonType.Body">
+				<DateEdit TValue="DateTime" @bind-Date="@Sown.PlantedOn" />
+            </Addon>
+        </Addons>
+		</p>	
+	<div class="d-flex flex-row-reverse justify-content-between">    
+		<Button  Color="Color.Warning"  Clicked="HandleValidSubmit">Add</Button>
+		<Button Color="Color.Secondary" Clicked="@Cancel">Cancel</Button>
+    </div>
+</Form>
 
 @code {
     [CascadingParameter]
     BlazoredModalInstance ModalInstance { get; set; }
-
     [Parameter]
-    public string CropId {get;set;}
-
-    public SownDto newSown = new();
+    public SownDto Sown { get;set;}
 
     public IEnumerable<PlantDto> Plants { get; set; } = new List<PlantDto>();
 
-    protected override Task OnInitializedAsync()
-    {       
-        _ = LoadPlants();
-        return base.OnInitializedAsync();
+    protected override async Task OnInitializedAsync()
+    {        
+        await LoadPlants();
+        await InvokeAsync(StateHasChanged);
     }
-
+          public void PlantValueChanged(int id)
+        {
+			
+            Sown.PlantId = id;
+        }
     public async Task LoadPlants() =>Plants =  await PlantManager.GetAll();    
     
     void Cancel() => ModalInstance.CancelAsync();
 
     public async Task HandleValidSubmit()
-    {
-         newSown.CropId = int.Parse(CropId);
-        await SownManager.Insert(newSown);   
+    {       
+        await SownManager.Insert(Sown);   
         await ModalInstance.CloseAsync(ModalResult.Ok("succees"));
     }
 }

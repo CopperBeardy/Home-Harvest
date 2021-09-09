@@ -1,5 +1,4 @@
-﻿using HomeHarvest.Client.Services;
-using HomeHarvest.Shared.Dtos;
+﻿using HomeHarvest.Shared.Dtos;
 
 namespace HomeHarvest.Client.Services
 {
@@ -7,7 +6,6 @@ namespace HomeHarvest.Client.Services
     {
         public PlantManager(IHttpClientFactory factory) : base(factory, "Plant")
         {
-
         }
     }
 }

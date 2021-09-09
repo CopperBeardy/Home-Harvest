@@ -1,9 +1,11 @@
 ﻿
 @page "/sown/{id}"
 <h3>@Crop.LocationYear</h3>
-<div class="flex ">			
+<div class="flex ">	
+	<h2>Sown Plants</h2>	
+	<Div Class="row">
 		<Div class="col col-md-4">
-		<h2>Sown Plants</h2>
+
 		<ListGroup >
 				@foreach(var item in @Crop.Sowed)
 			{
@@ -21,13 +23,14 @@
                                </div>
                         </div>
                    </ListGroupItem>
- </div>
+				   </div>
 			}
 		</ListGroup>
 		</Div>
-			<Div>
-				@*image of the plot location*@
+			<Div Class="col">
+				<img src="@imgsrc" @onclick="AddPOI"/>
 			</Div>
+	</Div>
 </div>
 
 

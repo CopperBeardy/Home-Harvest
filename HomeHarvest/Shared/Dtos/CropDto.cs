@@ -12,7 +12,6 @@ namespace HomeHarvest.Shared.Dtos
 		/// Year in which the crop was planted in
 		/// </summary>
 		[Required(ErrorMessage = "You must enter a year for the crop being sowed")]
-
 		public int Year { get; set; }
 
 		public string Location { get; set; }

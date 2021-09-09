@@ -5,7 +5,7 @@
 				<AddonLabel>PlantName</AddonLabel>
             </Addon>
 			<Addon AddonType="AddonType.Body">
-				<Select  @bind-SelectedValue="@PlantId">
+				<Select TValue="int" SelectedValue="@Sown.Plant.Id" SelectedValueChanged="@PlantValueChanged">
 				@foreach(var plant in Plants)
 					{
 						<SelectItem Value=@plant.Id>@plant.Name</SelectItem>
@@ -20,7 +20,7 @@
 				<AddonLabel>Planted on:</AddonLabel>
             </Addon>
 			<Addon AddonType="AddonType.Body">
-				<DateEdit TValue="DateTime" @bind-Date="@PlantedOn" />
+				<DateEdit TValue="DateTime" @bind-Date="@Sown.PlantedOn" />
             </Addon>
         </Addons>
 		</p>	

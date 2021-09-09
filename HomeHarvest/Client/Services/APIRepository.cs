@@ -1,16 +1,13 @@
-﻿using HomeHarvest.Shared.Dtos;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Net.Http.Json;
-using static System.Net.WebRequestMethods;
 
 namespace HomeHarvest.Client.Services
 {
-	public class APIRepository<TEntity> : IRepository<TEntity> where TEntity : class
-		{
+    public class APIRepository<TEntity> : IRepository<TEntity> where TEntity : class
+	{
 		private readonly HttpClient _httpClient;
 		private readonly IHttpClientFactory _factory;
-        readonly string _url;
-   
+        readonly string _url;   
 
         public APIRepository(IHttpClientFactory factory,string controller)
 		{

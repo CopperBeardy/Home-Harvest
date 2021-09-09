@@ -11,16 +11,12 @@ namespace HomeHarvest.Client.Pages
     {
         [Inject]
         PlantManager PlantManager { get; set; }
-
         [CascadingParameter]
         public IModalService Modal { get; set; }
-
         public IEnumerable<PlantDto> AllPlants { get; set; } = new List<PlantDto>();
+    
         protected override async Task OnInitializedAsync() =>   await LoadData();
-           
-        
-
-
+         
         public async Task LoadData()
         {
             AllPlants = await PlantManager.GetAll(); 
@@ -28,32 +24,26 @@ namespace HomeHarvest.Client.Pages
         }
 
         public async void ShowAddPlantModal()
-        {
-            var options = new ModalOptions()
-            {HideCloseButton = true};
-           var modalRef = Modal.Show<AddPlant>("Add Plant", options);
+        {            
+           var modalRef = Modal.Show<AddPlant>("Add Plant");
             var result = await modalRef.Result;
             if (!result.Cancelled)
             {
                 AllPlants.Append(result.Data);
                 await InvokeAsync(StateHasChanged);
             }
-
         }
 
         public async void ShowEditPlantModal(PlantDto plant)
-        {
-            var options = new ModalOptions()
-            {HideCloseButton = true};
+        {      
             var parameters = new ModalParameters();
             parameters.Add("Plant", plant);
-           var modalRef=  Modal.Show<EditPlant>("Edit plant", parameters, options);
+           var modalRef=  Modal.Show<EditPlant>("Edit plant", parameters);
             var result = await modalRef.Result;
             if (!result.Cancelled)
             {              
                await InvokeAsync(StateHasChanged);
-            }
-            
+            }            
         }
     }
 }

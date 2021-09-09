@@ -27,7 +27,6 @@ namespace HomeHarvest.Server.Controllers
 		public async Task<ActionResult<List<PlantDto>>> GetPlants() => 
 			_mapper.Map<List<PlantDto>>(await _context.Plants.ToListAsync());
 
-
 		[HttpGet("{id}")]
 		public async Task<ActionResult<PlantDto>> GetPlant(int id)
 		{		
@@ -59,12 +58,10 @@ namespace HomeHarvest.Server.Controllers
 				{
 					
 					_logger.LogError($"Plant object with Id {plant.Id} has encountered a update concurrencyException", ex);
-				}
-		
+				}		
 			return NoContent();
 		}
-
-	
+			
 		[HttpPost]
 		public async Task<ActionResult> PostPlant(PlantDto plant)
         {
@@ -97,8 +94,6 @@ namespace HomeHarvest.Server.Controllers
 			_logger.LogInformation($"Plant item with Id {id} has been removed Db ");
 			return Ok();
 		}
-
 		private bool PlantExists(int id) => _context.Plants.Any(e => e.Id == id);
-
 	}
 }

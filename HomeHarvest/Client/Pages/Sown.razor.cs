@@ -1,19 +1,15 @@
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using HomeHarvest.Client.Components;
-using HomeHarvest.Client.Models;
 using HomeHarvest.Client.Services;
 using HomeHarvest.Shared.Dtos;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace HomeHarvest.Client.Pages
 {
     public partial class Sown
-    {
-        
+    {        
       [Inject]
         CropManager CropManager { get; set; }
         [Inject]
@@ -22,54 +18,70 @@ namespace HomeHarvest.Client.Pages
         public string Id { get; set; }
         [CascadingParameter]
         public IModalService Modal { get; set; }
-
-        public SownDto EditItem = new();
+      
         public CropDto Crop { get; set; }
-
-        /// <summary>
-        /// Returns the calculated Harvest using PlantedOn and GrowInWeeks variables
-        /// </summary>
-
+        public string imgsrc { get; set; }
         protected override async Task OnInitializedAsync()
         {
             Crop = new CropDto() { Sowed = new List<SownDto>() };
+
             await LoadData();
+         
+        }
+
+        public async Task AddPOI(MouseEventArgs args)
+        {
+            // use offsets as location of click on the image to
+            // drop a pin
+            var sown = new SownDto()
+            {
+                CropId = Crop.Id,
+                PoiX = int.Parse(args.OffsetX.ToString()),
+                PoiY = int.Parse(args.OffsetY.ToString()),
+                PlantedOn = DateTime.Today,
+                PlantId = 0,
+              };
+            var parameters = new ModalParameters();
+            parameters.Add("Sown",sown);
+            var response =Modal.Show<AddSown>("New Sown",parameters);
+            var result = await response.Result;
+            if (!result.Cancelled)
+            {
+                await LoadData();
+            }
         }
 
         public async Task LoadData()
         {
             Crop = await CropManager.GetById(int.Parse(Id));
-            await InvokeAsync(StateHasChanged);
+            imgsrc = $"https://homeharveststorage.blob.core.windows.net/upload-container/{Crop.PlotImage}";
+          // add POI pins to img
+               await InvokeAsync(StateHasChanged);
+    
         }
 
-        async void RemoveSown(SownDto sown)
+        async Task RemoveSown(SownDto sown)
         {
-            var options = new ModalOptions()
-            {
-                HideCloseButton = true
-            };
             var removeModal = Modal.Show<RemoveConfirmation>(
-             $"Remove {sown.Plant.Name}, {sown.PlantedOn.ToShortDateString()}",options);
+             $"Remove {sown.Plant.Name}, {sown.PlantedOn.ToShortDateString()}");
             var result = await removeModal.Result;
             if (!result.Cancelled)
             {
                 await SownManager.Delete(sown.Id);
             }
             await LoadData();
+
         }
-        async void EditSownItem(SownDto sown)
+        async Task EditSownItem(SownDto sown)
         {
-            var options = new ModalOptions()
-            {
-                HideCloseButton =true
-            };
-            var parameters = new ModalParameters();
+           var parameters = new ModalParameters();
             parameters.Add("Sown", sown);
-            var editModal = Modal.Show<EditSown>("Edit",parameters,options);
-            await editModal.Result;
-       
-            await LoadData();
+             var resposne = Modal.Show<EditSown>("Edit",parameters);          
+            var result = await resposne.Result;
+            if(!result.Cancelled)
+            {
+                await LoadData();
+            }
         }
-    }
-        
+    }        
 }

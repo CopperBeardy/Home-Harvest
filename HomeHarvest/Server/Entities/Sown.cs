@@ -16,13 +16,14 @@ namespace HomeHarvest.Server.Entities
 		[Required(ErrorMessage = "The date you sowed this plant is required")]
 		public DateTime PlantedOn { get; set; }
 
+		public int? PoiX { get; set; }
+		public int? PoiY { get; set; }
+
 		[ForeignKey(nameof(Plant))]
 		public int PlantId { get; set; }
-
 		
 		public Crop Crop { get; set; }
 		[ForeignKey(nameof(Crop))]
 		public int CropId { get; set; }
-
 	}
 }

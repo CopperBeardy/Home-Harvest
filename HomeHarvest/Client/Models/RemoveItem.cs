@@ -1,5 +1,4 @@
-﻿
-namespace HomeHarvest.Client.Models
+﻿namespace HomeHarvest.Client.Models
 {
 	public class RemoveItem
 	{

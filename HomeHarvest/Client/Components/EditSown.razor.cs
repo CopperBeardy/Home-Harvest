@@ -18,7 +18,6 @@ namespace HomeHarvest.Client.Components
 		BlazoredModalInstance ModalInstance { get; set; }
 		[Parameter]
 		public SownDto Sown { get; set; }
-
 		public int PlantId { get; set; }
 		public DateTime PlantedOn { get; set; }
 		public IEnumerable<PlantDto> Plants { get; set; } = new List<PlantDto>();
@@ -32,17 +31,20 @@ namespace HomeHarvest.Client.Components
 		}
 		public async Task LoadPlants() =>Plants =  await PlantManager.GetAll();
 
-
 		void Cancel() => ModalInstance.CancelAsync();
-	
-		public async Task SaveChanges()
-		{
-			//Todo validate data
-			Sown.Plant = Plants.FirstOrDefault(p  => p.Id == PlantId);
-			Sown.PlantedOn = PlantedOn;
+
+        public void PlantValueChanged(int id)
+        {
+			
+            Sown.Plant = Plants.FirstOrDefault(p => p.Id == id);
+        }
+
+        public async Task SaveChanges()
+		{			
+			//Sown.Plant = Plants.FirstOrDefault(p  => p.Id == PlantId);
+			//Sown.PlantedOn = PlantedOn;
 			await SownManager.Update(Sown);	
 			await ModalInstance.CloseAsync(ModalResult.Ok("success"));
-		}
-	
+		}	
 	}
 }

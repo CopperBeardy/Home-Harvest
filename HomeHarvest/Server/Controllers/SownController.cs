@@ -23,7 +23,6 @@ namespace HomeHarvest.Server.Controllers
 			_mapper = mapper;
 		}
 
-		// GET: api/Sow
 		[HttpGet]
 		public async Task<ActionResult<List<SownDto>>> GetSown() =>
 			_mapper.Map<List<SownDto>>(await _context.Sowns.AsNoTracking().ToListAsync());
@@ -36,40 +35,29 @@ namespace HomeHarvest.Server.Controllers
 				var sow = await _context.Sowns
 					  .AsNoTracking()
 				.Include(p => p.Plant)
-				.FirstOrDefaultAsync(x => x.Id.Equals(id)); return _mapper.Map<SownDto>(sow);
+				.FirstOrDefaultAsync(x => x.Id.Equals(id)); 
+				return _mapper.Map<SownDto>(sow);
 			}
-			else
-			{
-				return NotFound();
-			}
+			return NotFound();		
 		}
 
 	[HttpPut]
 		public async Task<IActionResult> PutSow(SownDto sow)
 		{
-		
-			var entity = _mapper.Map<Sown>(sow);
+					var entity = _mapper.Map<Sown>(sow);
 			_context.Update(entity);
-	
-     
                 try
                 {
                     await _context.SaveChangesAsync();
                     _logger.LogInformation($"Sow object with Id {sow.Id} has been modified in the Db ");
                 }
                 catch (Exception ex)
-                {
-                
+                {                
 					_logger.LogError($"Sow object with Id {sow.Id} has encountered a update concurrencyException", ex);
-
-				
-                }
-          
+				 }          
             return NoContent();
 		}
 
-		// POST: api/Sow
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
 		public async Task<ActionResult> PostSow(SownDto sow)
         {
@@ -86,11 +74,9 @@ namespace HomeHarvest.Server.Controllers
             {
 				_logger.LogError($"Exception occured try to insert {sow.Plant},{sow.PlantedOn} to dataase: {ex}");
 				throw new Exception("Exception occured ", ex);
-
 			}
 		}
 
-		// DELETE: api/Sow/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteSow(int id)
 		{
@@ -104,11 +90,9 @@ namespace HomeHarvest.Server.Controllers
 			_context.Sowns.Remove(sow);
 			await _context.SaveChangesAsync();
 			_logger.LogInformation($"Sow item with Id {id} has been removed Db ");
-			return Ok();
-	
+			return Ok();	
 		}
 
 		private bool SowExists(int id) => _context.Sowns.Any(e => e.Id == id);
-
 	}
 }
