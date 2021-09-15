@@ -4,17 +4,17 @@ using System.Net.Http.Json;
 namespace HomeHarvest.Client.Services
 {
     public class APIRepository<TEntity> : IRepository<TEntity> where TEntity : class
-	{
-		private readonly HttpClient _httpClient;
-		private readonly IHttpClientFactory _factory;
-        readonly string _url;   
+    {
+        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _factory;
+        readonly string _url;
 
-        public APIRepository(IHttpClientFactory factory,string controller)
-		{
-			_factory = factory;
-			_httpClient = _factory.CreateClient("HomeHarvest.ServerAPI");
-			_url = $"api/{controller}";
-		}
+        public APIRepository(IHttpClientFactory factory, string controller)
+        {
+            _factory = factory;
+            _httpClient = _factory.CreateClient("HomeHarvest.ServerAPI");
+            _url = $"api/{controller}";
+        }
         public async Task<IEnumerable<TEntity>> GetAll()
         {
             try
@@ -41,7 +41,7 @@ namespace HomeHarvest.Client.Services
                 var response = JsonConvert.DeserializeObject<TEntity>(responseBody);
                 return response;
             }
-            catch (Exception )
+            catch (Exception)
             {
                 return null;
             }
@@ -51,16 +51,16 @@ namespace HomeHarvest.Client.Services
         {
             try
             {
-				var result = await _httpClient.PostAsJsonAsync(_url, entity);
-				result.EnsureSuccessStatusCode();
-				string responseBody = await result.Content.ReadAsStringAsync();
-				var response = JsonConvert.DeserializeObject<TEntity>(responseBody);
-				return response;
+                var result = await _httpClient.PostAsJsonAsync(_url, entity);
+                result.EnsureSuccessStatusCode();
+                string responseBody = await result.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<TEntity>(responseBody);
+                return response;
             }
             catch (Exception)
             {
                 //todo handle exception
-              return null;
+                return null;
             }
         }
 
@@ -71,30 +71,30 @@ namespace HomeHarvest.Client.Services
                 var result = await _httpClient.PutAsJsonAsync(_url, entity);
                 result.EnsureSuccessStatusCode();
                 string responseBody = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<TEntity>(responseBody);    
+                var response = JsonConvert.DeserializeObject<TEntity>(responseBody);
                 return response;
             }
             catch (Exception)
             {
-             
+
                 return null;
             }
-         
+
         }
 
         public async Task<bool> Delete(int id)
         {
             try
             {
-                var result = await _httpClient.DeleteAsync ($"{_url}/{id}");
-                result.EnsureSuccessStatusCode();         
-          
-                return true ;
+                var result = await _httpClient.DeleteAsync($"{_url}/{id}");
+                result.EnsureSuccessStatusCode();
+
+                return true;
             }
             catch (Exception)
             {
                 return false;
-            }          
+            }
         }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeHarvest.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210822091303_rename of sow to sown")]
-    partial class renameofsowtosown
+    [Migration("20210910064237_current")]
+    partial class current
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,11 +33,6 @@ namespace HomeHarvest.Server.Migrations
 
                     b.Property<string>("PlotImage")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -65,17 +60,12 @@ namespace HomeHarvest.Server.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
                     b.HasKey("Id");
 
                     b.ToTable("Plants");
                 });
 
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Sowed", b =>
+            modelBuilder.Entity("HomeHarvest.Server.Entities.Sown", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,10 +81,11 @@ namespace HomeHarvest.Server.Migrations
                     b.Property<DateTime>("PlantedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                    b.Property<int?>("PoiX")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PoiY")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -102,7 +93,7 @@ namespace HomeHarvest.Server.Migrations
 
                     b.HasIndex("PlantId");
 
-                    b.ToTable("Sown");
+                    b.ToTable("Sowns");
                 });
 
             modelBuilder.Entity("HomeHarvest.Server.Models.ApplicationUser", b =>
@@ -408,7 +399,7 @@ namespace HomeHarvest.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Sowed", b =>
+            modelBuilder.Entity("HomeHarvest.Server.Entities.Sown", b =>
                 {
                     b.HasOne("HomeHarvest.Server.Entities.Crop", "Crop")
                         .WithMany("Sowed")

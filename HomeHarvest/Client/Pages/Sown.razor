@@ -5,7 +5,6 @@
 	<h2>Sown Plants</h2>	
 	<Div Class="row">
 		<Div class="col col-md-4">
-
 		<ListGroup >
 				@foreach(var item in @Crop.Sowed)
 			{
@@ -28,7 +27,7 @@
 		</ListGroup>
 		</Div>
 			<Div Class="col">
-				<img src="@imgsrc" @onclick="AddPOI"/>
+				<img src="@ImgSrc" @onclick="AddSown"/>
 			</Div>
 	</Div>
 </div>

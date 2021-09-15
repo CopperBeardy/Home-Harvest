@@ -1,7 +1,4 @@
-﻿@inject  PlantManager PlantManager
-@inject  SownManager SownManager
-
-<Form  >
+﻿<Form  >
 	<p>
 		<Addons>
 			<Addon AddonType="AddonType.Start">
@@ -28,36 +25,9 @@
         </Addons>
 		</p>	
 	<div class="d-flex flex-row-reverse justify-content-between">    
-		<Button  Color="Color.Warning"  Clicked="HandleValidSubmit">Add</Button>
+		<Button  Color="Color.Warning"  Clicked="@HandleValidSubmit">Add</Button>
 		<Button Color="Color.Secondary" Clicked="@Cancel">Cancel</Button>
     </div>
 </Form>
 
-@code {
-    [CascadingParameter]
-    BlazoredModalInstance ModalInstance { get; set; }
-    [Parameter]
-    public SownDto Sown { get;set;}
 
-    public IEnumerable<PlantDto> Plants { get; set; } = new List<PlantDto>();
-
-    protected override async Task OnInitializedAsync()
-    {        
-        await LoadPlants();
-        await InvokeAsync(StateHasChanged);
-    }
-          public void PlantValueChanged(int id)
-        {
-			
-            Sown.PlantId = id;
-        }
-    public async Task LoadPlants() =>Plants =  await PlantManager.GetAll();    
-    
-    void Cancel() => ModalInstance.CancelAsync();
-
-    public async Task HandleValidSubmit()
-    {       
-        await SownManager.Insert(Sown);   
-        await ModalInstance.CloseAsync(ModalResult.Ok("succees"));
-    }
-}

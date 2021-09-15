@@ -4,34 +4,30 @@ using System.Text.Json.Serialization;
 
 namespace HomeHarvest.Shared.Dtos
 {
-	public class SownDto
-	{
-		[JsonInclude]
-		public int Id { get; set; }
-		/// <summary>
-		/// Plant that has been planted
-		/// </summary>
+    public class SownDto : BaseDto
+    {
+        [JsonInclude]
+        public PlantDto Plant { get; set; }
 
-		[JsonInclude]
-		public PlantDto Plant { get; set; }
+        [JsonInclude]
+        public int? PoiX { get; set; }
 
-		public int? PoiX { get; set; }
+        [JsonInclude]
         public int? PoiY { get; set; }
 
-
-        /// <summary>
-        /// Date on which the plant was planted
-        /// </summary>
         [Required(ErrorMessage = "The date you sown this plant is required")]
-		[JsonInclude]
-		public DateTime PlantedOn { get; set; }
-		
-		[ForeignKey(nameof(Plant))]
-		public int PlantId { get; set; }
+        [JsonInclude]
+        public DateTime PlantedOn { get; set; }
 
-		[JsonIgnore]
-		public  CropDto Crop { get; set; }
-		[ForeignKey(nameof(Crop))]
-		public int CropId { get; set; }
-	}
+        [ForeignKey(nameof(Plant))]
+        [JsonInclude]
+        public int PlantId { get; set; }
+
+        [JsonIgnore]
+        public CropDto Crop { get; set; }
+        [ForeignKey(nameof(Crop))]
+
+        [JsonInclude]
+        public int CropId { get; set; }
+    }
 }

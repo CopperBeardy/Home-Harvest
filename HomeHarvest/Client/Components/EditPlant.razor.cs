@@ -13,14 +13,14 @@ namespace HomeHarvest.Client.Components
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
         [Parameter]
-       public  PlantDto Plant { get; set; } 
+        public PlantDto Plant { get; set; }
         async Task Cancel() => await ModalInstance.CancelAsync();
-     
+
         public async Task HandleValidSubmit()
         {
             await PlantManager.Update(Plant);
             await ModalInstance.CloseAsync(ModalResult.Ok("success"));
-          
+
         }
     }
 }

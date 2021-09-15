@@ -8,10 +8,10 @@
         <div class="col col-md-2">
             <Card>
                 <CardBody>
-                    <CardTitle Size="5">@crop.LocationYear</CardTitle>
+                    <CardTitle Size="5">@crop.LocationYear</CardTitle>                 
                     <CardImage Source="@($"https://homeharveststorage.blob.core.windows.net/upload-container/{crop.PlotImage}")" Alt="image ofplot "></CardImage>
                     <Button class="mt-1" Color="Color.Primary" Clicked="@(() => NavigateToSown(crop.Id))">Plants</Button>
-                    <Button class="mt-1" Color="Color.Danger" @onclick="@(() => RemoveCrop(crop.Id))"><Icon Name="@("fas fa-times")" /></Button>
+                    <Button class="mt-1" Color="Color.Danger" Clicked="@(() => RemoveCrop(crop.Id))"><Icon Name="@("fas fa-times")" /></Button>
                 </CardBody>
             </Card>
         </div>

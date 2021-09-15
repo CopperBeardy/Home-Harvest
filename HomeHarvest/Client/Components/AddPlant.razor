@@ -36,7 +36,7 @@
    </Addons>
    </p>
        <div class="d-flex flex-row-reverse justify-content-between">
-            		<Button Color="Color.Success" Type="ButtonType.Submit" Clicked="HandleValidSubmit">Add</Button>
+            		<Button Color="Color.Success"  Clicked="@HandleValidSubmit">Add</Button>
 					<Button Color="Color.Secondary"  Clicked="@Cancel" >Cancel</Button>
         </div>
 </Form>
@@ -51,6 +51,6 @@
     public async Task HandleValidSubmit()
     {
         await PlantManager.Insert(Plant);
-        await ModalInstance.CloseAsync(ModalResult.Ok(Plant));
+        await ModalInstance.CloseAsync();
     }
 }
