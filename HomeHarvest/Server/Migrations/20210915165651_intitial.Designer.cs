@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeHarvest.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210910064237_current")]
-    partial class current
+    [Migration("20210915165651_intitial")]
+    partial class intitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

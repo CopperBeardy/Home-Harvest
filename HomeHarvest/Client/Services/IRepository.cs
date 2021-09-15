@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace HomeHarvest.Client.Services
 {
     public interface IRepository<TEntity> where TEntity : class

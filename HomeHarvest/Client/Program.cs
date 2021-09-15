@@ -5,6 +5,8 @@ using Blazorise.Icons.FontAwesome;
 using HomeHarvest.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace HomeHarvest.Client
 {
