@@ -9,6 +9,6 @@ namespace HomeHarvest.Client.Services
         {
         }
         public static string DownloadPlotImage(string name) =>
-            $"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
+            $"http://127.0.0.1:10000/upload-container/{name}";
     }
 }
