@@ -9,13 +9,13 @@ namespace HomeHarvest.Client.Services
     public class APIRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private readonly HttpClient _httpClient;
-        private readonly IHttpClientFactory _factory;
+        //private readonly IHttpClientFactory _factory;
         readonly string _url;
 
-        public APIRepository(IHttpClientFactory factory, string controller)
+        public APIRepository(HttpClient client, string controller)
         {
-            _factory = factory;
-            _httpClient = _factory.CreateClient("HomeHarvest.ServerAPI");
+            //_factory = factory;
+            _httpClient = client;// _factory.CreateClient("HomeHarvest.ServerAPI");
             _url = $"api/{controller}";
         }
         public async Task<IEnumerable<TEntity>> GetAll()

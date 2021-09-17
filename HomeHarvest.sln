@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeHarvest.Client", "HomeH
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeHarvest.Shared", "HomeHarvest\Shared\HomeHarvest.Shared.csproj", "{2EDDBC16-1DAB-4EFD-BC80-10B5376C0A27}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeHarvestTests", "HomeHarvest.Client.Tests\HomeHarvestTests.csproj", "{549F86EC-821D-4A44-A9E0-AD29F706AE86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2EDDBC16-1DAB-4EFD-BC80-10B5376C0A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EDDBC16-1DAB-4EFD-BC80-10B5376C0A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EDDBC16-1DAB-4EFD-BC80-10B5376C0A27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{549F86EC-821D-4A44-A9E0-AD29F706AE86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549F86EC-821D-4A44-A9E0-AD29F706AE86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549F86EC-821D-4A44-A9E0-AD29F706AE86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549F86EC-821D-4A44-A9E0-AD29F706AE86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

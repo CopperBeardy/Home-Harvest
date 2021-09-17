@@ -1,6 +1,7 @@
-﻿using HomeHarvest.Server.Entities;
+﻿using Duende.IdentityServer.EntityFramework.Options;
+using HomeHarvest.Server.Entities;
 using HomeHarvest.Server.Models;
-using IdentityServer4.EntityFramework.Options;
+
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

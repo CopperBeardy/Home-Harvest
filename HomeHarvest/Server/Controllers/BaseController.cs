@@ -12,15 +12,15 @@ using System.Threading.Tasks;
 namespace HomeHarvest.Server.Controllers;
 
 [Authorize]
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Produces("application/json")]
 public class BaseController<TEntity, TModel> : ControllerBase where TEntity : BaseEntity where TModel : BaseDto
 {
     protected readonly ApplicationDbContext _context;
-    protected readonly ILogger<ControllerBase> _logger;
+    protected readonly ILogger<BaseController<TEntity,TModel>> _logger;
     protected readonly IMapper _mapper;
-    public BaseController(ApplicationDbContext context, ILogger<ControllerBase> logger, IMapper mapper)
+    public BaseController(ApplicationDbContext context, ILogger<BaseController<TEntity,TModel>> logger, IMapper mapper)
     {
         _context = context;
         _logger = logger;

@@ -1,17 +1,71 @@
-﻿namespace HomeHarvest.Server
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+﻿using HomeHarvest.Server.Data;
+using HomeHarvest.Server.Models;
+using HomeHarvest.Server.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+	options.UseSqlServer(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddCors(policy =>
+{
+	policy.AddPolicy("CorsPolicy", opt => opt
+.AllowAnyOrigin()
+.AllowAnyHeader()
+.AllowAnyMethod()
+	.WithExposedHeaders("X-Pagination"));
+});
+builder.Services.Configure<BlobContainerConnection>(builder.Configuration.GetSection(nameof(BlobContainerConnection)));
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddScoped<IBlobService, BlobService>();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+	.AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddIdentityServer()
+	.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+
+builder.Services.AddAuthentication()
+	.AddIdentityServerJwt();
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+	app.UseMigrationsEndPoint();
+	app.UseWebAssemblyDebugging();
 }
+else
+{
+	app.UseExceptionHandler("/Error");
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+app.UseBlazorFrameworkFiles();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseIdentityServer();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseCors("CorsPolicy");
+
+app.MapRazorPages();
+app.MapControllers();
+app.MapFallbackToFile("index.html");
+
+app.Run();
+

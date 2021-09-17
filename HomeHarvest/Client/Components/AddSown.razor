@@ -3,31 +3,31 @@
 		<Addons>
 			<Addon AddonType="AddonType.Start">
 				<AddonLabel>PlantName</AddonLabel>
-            </Addon>
+			</Addon>
 			<Addon AddonType="AddonType.Body">
 				<Select TValue="int" SelectedValue="@Sown.PlantId" SelectedValueChanged="@PlantValueChanged">
 				@foreach(var plant in Plants)
 					{
 						<SelectItem Value=@plant.Id>@plant.Name</SelectItem>
 					}
-            </Select>
+			</Select>
 			</Addon>
-        </Addons>
+		</Addons>
 		</p>
 		<p>
 		<Addons>
 			<Addon AddonType="AddonType.Start">
 				<AddonLabel>Planted on:</AddonLabel>
-            </Addon>
+			</Addon>
 			<Addon AddonType="AddonType.Body">
 				<DateEdit TValue="DateTime" @bind-Date="@Sown.PlantedOn" />
-            </Addon>
-        </Addons>
+			</Addon>
+		</Addons>
 		</p>	
 	<div class="d-flex flex-row-reverse justify-content-between">    
 		<Button  Color="Color.Warning"  Clicked="@HandleValidSubmit">Add</Button>
 		<Button Color="Color.Secondary" Clicked="@Cancel">Cancel</Button>
-    </div>
+	</div>
 </Form>
 
 

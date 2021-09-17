@@ -14,7 +14,7 @@ namespace HomeHarvest.Client.Components
         [Parameter]
         public EventCallback<bool> onAdd { get; set; }
         [Inject]
-        CropManager CropManager { get; set; }
+        CropManager? CropManager { get; set; }
 
         public async Task HandleValidSubmit()
         {

@@ -5,7 +5,7 @@ namespace HomeHarvest.Client.Services
 {
     public class CropManager : APIRepository<CropDto>
     {
-        public CropManager(IHttpClientFactory factory) : base(factory, "Crop")
+        public CropManager(HttpClient client) : base(client, "Crop")
         {
         }
         public static string DownloadPlotImage(string name) =>
