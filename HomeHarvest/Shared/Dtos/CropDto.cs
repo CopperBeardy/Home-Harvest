@@ -1,33 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace HomeHarvest.Shared.Dtos
 {
-	
-	public class CropDto
-	{
-		public int Id { get; set; }
+    public class CropDto : BaseDto
+    {
+        [JsonInclude]
+        [Required(ErrorMessage = "You must enter a year for the crop being sowed")]
+        public int Year { get; set; }
 
-		/// <summary>
-		/// Year in which the crop was planted in
-		/// </summary>
-		[Required(ErrorMessage = "You must enter a year for the crop being sowed")]
+        [JsonInclude]
+        public string Location { get; set; }
 
-		public int Year { get; set; }
+        [JsonInclude]
+        public string PlotImage { get; set; }
 
-		public string Location { get; set; }
-		/// <summary>
-		/// Image name of the plot for the current crop
-		/// </summary>
+        public byte[] Image { get; set; }
 
-		public string LocationYear => $"{Location}, {Year}";
-		public string PlotImage { get; set; }
+        [JsonInclude]
+        public List<SownDto> Sowed { get; set; }
 
-		/// <summary>
-		/// Collection of plants that were planted in the crop year
-		/// </summary>
-
-		[JsonInclude]
-		public  List<SownDto> Sowed { get; set; } 
-	}
+        public string LocationYear => $"{Location}, {Year}";
+    }
 }

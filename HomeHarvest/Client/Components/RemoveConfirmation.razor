@@ -1,0 +1,13 @@
+﻿ <p>Performing this action will permentaly remove it. </p>
+<div class="d-flex flex-row-reverse justify-content-between">
+    <Button Color="Color.Danger"  Clicked="@Delete">Confirm</Button>
+    <Button Color="Color.Secondary"  Clicked="@Cancel">Cancel</Button>   
+</div>
+
+@code {
+    [CascadingParameter] 
+    BlazoredModalInstance ModalInstance {get;set;}  
+
+    void Cancel() => ModalInstance.CancelAsync();
+    void Delete() => ModalInstance.CloseAsync(ModalResult.Ok("success"));
+}

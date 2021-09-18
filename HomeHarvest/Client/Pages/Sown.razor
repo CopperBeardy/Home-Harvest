@@ -1,16 +1,35 @@
-﻿@page "/sown/{id}"
-<h3>Sown</h3>
-<div class="flex ">
-	<div>
-		<DxDataGrid 	Data="@Crop.Sowed"
-	
-                RowUpdatingAsync="@OnRowUpdatingAsync"
-                RowRemovingAsync="@OnRowRemovingAsync" >
-		</DxDataGrid>
-	</div>
-	<div>
-	<img src="ImgSource">
-	</div>
+﻿
+@page "/sown/{id}"
+<h3>@Crop.LocationYear</h3>
+<div class="flex ">	
+	<h2>Sown Plants</h2>	
+	<Div Class="row">
+		<Div class="col col-md-4">
+		<ListGroup >
+				@foreach(var item in @Crop.Sowed)
+			{
+				<div Class="mt-1" >
+					<ListGroupItem>
+                        <Heading >@item.Plant.Name (@Enum.GetName(typeof(Genus), item.Plant.Genus))</Heading>
+                        <div Flex="Flex.JustifyContent.Between">
+                            <div>
+                                <span>Planted: @item.PlantedOn.ToShortDateString()</span>
+                                <span>Harvest: @item.PlantedOn.AddDays(item.Plant.GrowInWeeks * 7).ToShortDateString()</span>
+                                </Div> 
+                                <div>
+                                    <button class="btn btn-primary"  @onclick="@(() => EditSownItem(item))">Edit</button>
+                                    <button  class="btn btn-danger" @onclick="@(() => RemoveSown(item))" ><Icon Name="@("fas fa-times")" /></button>
+                               </div>
+                        </div>
+                   </ListGroupItem>
+				   </div>
+			}
+		</ListGroup>
+		</Div>
+			<Div Class="col">
+				<img src="@ImgSrc" @onclick="AddSown"/>
+			</Div>
+	</Div>
 </div>
 
 

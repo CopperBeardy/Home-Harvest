@@ -1,0 +1,42 @@
+﻿<Form >  
+    <p>
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel>Plant Name</AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit @bind-Text="@Plant.Name" Placeholder="Enter plants name"></TextEdit> 
+             </Addon>
+        </Addons> 
+        </p>
+ <p>
+   <Addons>
+       <Addon AddonType="AddonType.Start">
+           <AddonLabel>Plant Genus</AddonLabel>
+       </Addon>
+        <Addon AddonType="AddonType.Body" > 
+            <Select TValue="Genus" @bind-SelectedValue="@Plant.Genus" >
+           @foreach(var genus in Enum.GetValues(typeof(Genus)))
+            {                
+                <SelectItem Value="@genus">@genus</SelectItem>
+            } 
+        </Select>
+        </Addon>
+   </Addons>
+   </p>
+   <p>
+    <Addons>
+       <Addon AddonType="AddonType.Start">
+                  <AddonLabel>Grow time in weeks</AddonLabel>
+       </Addon>
+        <Addon AddonType="AddonType.Body">
+            <NumericEdit @bind-Value="@Plant.GrowInWeeks" />
+        </Addon>
+   </Addons>
+   </p>
+       <div class="d-flex flex-row-reverse justify-content-between">
+            		<Button Color="Color.Warning"  Clicked="@HandleValidSubmit">Update</Button>
+					<Button Color="Color.Secondary"  Clicked="@Cancel" >Cancel</Button>
+        </div>
+</Form>
+
