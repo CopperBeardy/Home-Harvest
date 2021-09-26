@@ -1,12 +1,8 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Execution;
 using HomeHarvest.Server.Controllers;
-using HomeHarvest.Server.Data;
 using HomeHarvest.Shared.Dtos;
-using HomeHarvest.Shared.Enums;
 using HomeHarvestTests.TestHelpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
@@ -21,56 +17,67 @@ namespace HomeHarvestTests.Server
 	[ExcludeFromCodeCoverage]
 	public  class SownControllerTests
 	{
-		SownController sut;
-		ApplicationDbContext context;
-
-		public SownControllerTests()
-		{
-			var loggerMock = new Mock<ILogger<SownController>>();
-
-			context = TestContext.GetDbContext();
-			var mapper = TestMapper.GetTestMapper();
-
-			sut = new SownController(context, loggerMock.Object, mapper);
-		}
 
 		[Fact]
-		public async Task ReturnAllItems()
+		public async Task GetAll_return_List_sowndtos()
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<SownController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new SownController(context, loggerMock.Object, mapper);
+
 			// Act
 			var result = await sut.GetAll();
 
 			// Assert
 			result.Should().BeOfType<ActionResult<IEnumerable<SownDto>>>();
-			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(TestData.GetSown());
+			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(TestData.SownDtoList());
 		}
 
-		[Fact]
-		public async Task ReturnSpecificItemFromId()
+		[Theory]
+		[InlineData(1)]
+		[InlineData(2)]
+		public async Task Get_with_valid_id_returns_sowndto(int id)
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<SownController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new SownController(context, loggerMock.Object, mapper);
+			var expected = GetSownWithPlants();
+
 			// Act
-			var result1 = await sut.Get(1);
-			var result2 = await sut.Get(2);
+			var result = await sut.Get(id);
 
 			// Assert
-			var expected = TestData.GetSownWithPlants();
-			using (new AssertionScope())
-			{
-				result1.Should().BeOfType<ActionResult<SownDto>>();
-				result1.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected[0]);
-
-				result2.Should().BeOfType<ActionResult<SownDto>>();
-				result2.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected[1]);
-			}
+			result.Should().BeOfType<ActionResult<SownDto>>();
+			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected[id-1]);
 		}
 
 		[Fact]
-		public async Task NotFoundIsReturnedIfItemNotFound()
+		public async Task Get_with_invalid_id_returns_notfound_result()
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<SownController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new SownController(context, loggerMock.Object, mapper);
 			// Act
 			var result = await sut.Get(3);
 			// Assert
 			result.Result.Should().BeOfType<NotFoundResult>();
+		}
+
+		public static List<SownDto> GetSownWithPlants()
+		{
+			var plants = TestData.PlantDtoList();
+			var sown = TestData.SownDtoList();
+			foreach (var s in sown)
+			{
+				s.Plant = plants.SingleOrDefault(x => x.Id == s.Id);
+			}
+			return sown;
 		}
 	}
 }

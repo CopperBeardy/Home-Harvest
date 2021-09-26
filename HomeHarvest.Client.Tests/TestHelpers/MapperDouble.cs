@@ -10,15 +10,13 @@ using System.Threading.Tasks;
 namespace HomeHarvestTests.TestHelpers
 {
 	[ExcludeFromCodeCoverage]
-	public static  class TestMapper
+	public static  class MapperDouble
 	{
-		public static IMapper GetTestMapper()
+		public static IMapper CreateMapper()
 		{
-				var mapConfig = new MapperConfiguration(mc =>
-					mc.AddProfile(new AutoMapperProfiles())
-				);
-				IMapper mapper = mapConfig.CreateMapper();
-				return mapper;
+				return new MapperConfiguration(mc =>
+					mc.AddProfile(new AutoMapperProfiles()))
+				.CreateMapper();
 		}
 	}
 }

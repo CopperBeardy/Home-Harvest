@@ -9,13 +9,11 @@ namespace HomeHarvest.Client.Services
     public class APIManager<TEntity> : IManager<TEntity> where TEntity : class
     {
         private readonly HttpClient _httpClient;
-        //private readonly IHttpClientFactory _factory;
         readonly string _url;
 
         public APIManager(HttpClient client, string controller)
         {
-            //_factory = factory;
-            _httpClient = client;// _factory.CreateClient("HomeHarvest.ServerAPI");
+            _httpClient = client;
             _url = $"api/{controller}";
         }
         public async Task<IEnumerable<TEntity>> GetAll()
@@ -30,7 +28,7 @@ namespace HomeHarvest.Client.Services
             }
             catch (Exception)
             {
-                return null;
+                return null ;
             }
         }
 

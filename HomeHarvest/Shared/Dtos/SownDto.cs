@@ -27,6 +27,7 @@ namespace HomeHarvest.Shared.Dtos
         public int PlantId { get; set; }
 
         [JsonIgnore]
+       
         public CropDto Crop { get; set; }
         [ForeignKey(nameof(Crop))]
 

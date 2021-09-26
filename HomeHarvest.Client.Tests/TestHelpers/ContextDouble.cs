@@ -12,9 +12,9 @@ using System.Linq;
 namespace HomeHarvestTests.TestHelpers
 {
 	[ExcludeFromCodeCoverage]
-	public static class TestContext
+	public static class ContextDouble
 	{
-		public static ApplicationDbContext GetDbContext()
+		public static ApplicationDbContext CreateDbContext()
 		{
 			var options = new DbContextOptionsBuilder<ApplicationDbContext>()
 				.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())

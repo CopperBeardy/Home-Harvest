@@ -30,7 +30,7 @@ namespace HomeHarvest.Client.Components
 			await InvokeAsync(StateHasChanged);
 		}
 
-		public void PlantValueChanged(int id) =>			Sown.PlantId = id;
+		public void PlantValueChanged(int id) =>	Sown.PlantId = id;
 		public async Task LoadPlants() => Plants = await PlantManager.GetAll();
 		void Cancel() => ModalInstance.CancelAsync();
 		public async Task HandleValidSubmit()

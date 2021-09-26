@@ -18,7 +18,7 @@ namespace HomeHarvest.Client.Components
 
         public async Task HandleValidSubmit()
         {
-            await CropManager.Insert(Crop);
+			 await CropManager.Insert(Crop);
             Crop = new CropDto();
             ShowForm();
             await onAdd.InvokeAsync();

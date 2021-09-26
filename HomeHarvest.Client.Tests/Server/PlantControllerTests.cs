@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Execution;
 using HomeHarvest.Server.Controllers;
-using HomeHarvest.Server.Data;
 using HomeHarvest.Shared.Dtos;
 using HomeHarvest.Shared.Enums;
 using HomeHarvestTests.TestHelpers;
@@ -15,58 +13,61 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-
 namespace HomeHarvestTests.Server
 {
 	[ExcludeFromCodeCoverage]
 	public class PlantControllerTests
 	{
 
-		PlantController sut;
-		ApplicationDbContext context;
-		public PlantControllerTests()
-		{
-			var loggerMock = new Mock<ILogger<PlantController>>();
-
-			context = TestContext.GetDbContext();
-			var mapper = TestMapper.GetTestMapper();
-
-			 sut = new PlantController(context, loggerMock.Object, mapper);
-
-		}
 		[Fact]
-		public async Task ReturnAllItems()
+		public async Task GetAll_reutrns_list_cropdtos()
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new PlantController(context,loggerMock.Object, mapper);
+			var expected = TestData.PlantDtoList();
+
 			// Act
 			var result = await sut.GetAll();
 
 			// Assert
 			result.Should().BeOfType<ActionResult<IEnumerable<PlantDto>>>();
-			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(TestData.GetPlants());
+			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected);
+
 		}
 
-		[Fact]
-		public async Task ReturnSpecificItemFromId()
+		[Theory]
+		[InlineData(1)]
+		[InlineData(2)]
+		public async Task Get_with_valid_id_returns_cropdto(int id)
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new PlantController(context, loggerMock.Object, mapper);
+			var expected = TestData.PlantDtoList();
+
 			// Act
-			var result1 = await sut.Get(1);
-			var result2 = await sut.Get(2);
+			var result = await sut.Get(id);
 
 			// Assert
-			var expected = TestData.GetPlants();
-			using (new AssertionScope())
-			{
-				result1.Should().BeOfType<ActionResult<PlantDto>>();
-				result1.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected[0]);
+			result.Should().BeOfType<ActionResult<PlantDto>>();
+			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected[id-1]);
 
-				result2.Should().BeOfType<ActionResult<PlantDto>>();
-				result2.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected[1]);
-			}
 		}
 
 		[Fact]
-		public async Task NotFoundIsReturnedIfItemNotFound()
+		public async Task Get_with_invalid_id_returns_notfound_result()
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+		var sut = new PlantController(context, loggerMock.Object, mapper);
+
 			// Act
 			var result = await sut.Get(3);
 			// Assert
@@ -74,8 +75,13 @@ namespace HomeHarvestTests.Server
 		}
 
 		[Fact]
-		public async Task InsertNewItemIntoDb()
+		public async Task Post_with_valid_cropdto_returns_ok_result()
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new PlantController(context, loggerMock.Object, mapper);
 			var plant = new PlantDto()
 			{
 				Genus = Genus.Tree,
@@ -84,85 +90,104 @@ namespace HomeHarvestTests.Server
 			};
 
 			//act
-			var response = await sut.Post(plant);
-			//assert
+			var result = await sut.Post(plant);
 
-			Assert.IsType<OkResult>(response);
+			//assert
+			result.Should().BeOfType<OkResult>();
 			context.Plants.Should().HaveCount(3);
 		}
 
 		[Fact]
-		public async Task ReturnBadRequestInsertNewItemIntoDb()
+		public async Task Post_with_invalid_cropdto_returns_badrequest_result()
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new PlantController(context, loggerMock.Object, mapper);
 			var plant = new PlantDto();
-		
 
 			//act
-			var response = await sut.Post(plant);
-			//assert
+			var result = await sut.Post(plant);
 
-			Assert.IsType<BadRequestResult>(response);
-			
+			//assert
+			result.Should().BeOfType<BadRequestResult>();
 		}
 
 		[Fact]
-		public async Task UpdateItemInDb()
+		public async Task Put_with_valid_cropdto_returns_ok_result()
 		{
-			//arrange
-			var plants = TestData.GetPlants();
+			//Arrange
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new PlantController(context, loggerMock.Object, mapper);
+			var plants = TestData.PlantDtoList();
 			var plant = plants[0];
 			plant.Genus = Genus.Other;
 			plant.Name = "Cactus";
 
 			//act
-			var response = await sut.Put(plant);
+			var result = await sut.Put(plant);
 			var actual = context.Plants.AsNoTracking().FirstOrDefault(x => x.Id ==plant.Id);
 
 			//Assert
-			Assert.IsType<OkResult>(response);
+			result.Should().BeOfType<OkResult>();
 			context.Plants.Should().HaveCount(2);
-			Assert.Equal(Genus.Other, actual.Genus);
-			Assert.Equal("Cactus", actual.Name);
+			actual.Should().BeEquivalentTo(plant);
+
 		}
 
 		[Fact]
-		public async Task BadRequestResultFromUpdateWhenBadEntity()
+		public async Task Put_with_invalid_cropdto_returns_badrequest_result()
 		{
-			//arrange
-			var plant = new PlantDto
-			{
-				Genus = Genus.Tree,
-				GrowInWeeks = 1,
-				Id = 4,
-				Name = "Bad entity"
-			};
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new PlantController(context, loggerMock.Object, mapper);
+
 			//act
-			var response = await sut.Put(plant);
+			var result = await sut.Put(new PlantDto());
 
 			//assert
-			Assert.IsType<BadRequestResult>(response);
+			result.Should().BeOfType<BadRequestResult>();
 			context.Plants.Should().HaveCount(2);
 		}
 
 		[Fact]
-		public async Task RemoveItemForDatabase()
+		public async Task Delete_with_valid_id_Return_ok_result()
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new PlantController(context, loggerMock.Object, mapper);
+
 			//act
-			var response = await sut.Delete(1);
+			var result = await sut.Delete(1);
 
 			//
-			Assert.IsType<OkResult>(response);
+			result.Should().BeOfType<OkResult>();
 			context.Plants.Should().HaveCount(1);
 		}
 
 		[Fact]
-		public async Task NotFoundResultWhenItemForDeletionDoesNotExist()
+		public async Task Delete_with_invalid_id_returns_notfound_result()
 		{
+			//Arrange
+			var loggerMock = new Mock<ILogger<PlantController>>();
+			var context = ContextDouble.CreateDbContext();
+			var mapper = MapperDouble.CreateMapper();
+			var sut = new PlantController(context, loggerMock.Object, mapper);
+
 			//act
-			var response = await sut.Delete(3);
+			var result = await sut.Delete(3);
 
 			//
-			Assert.IsType<NotFoundObjectResult>(response);
+
+			result.Should().BeOfType<NotFoundObjectResult>();
 			context.Plants.Should().HaveCount(2);
 		}
 

@@ -1,19 +1,15 @@
-﻿using HomeHarvest.Server.Entities;
-using HomeHarvest.Shared.Dtos;
+﻿using HomeHarvest.Shared.Dtos;
 using HomeHarvest.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HomeHarvestTests.TestHelpers
 {
 	[ExcludeFromCodeCoverage]
 	public static class TestData
 	{
-		public static List<PlantDto> GetPlants()
+		public static List<PlantDto> PlantDtoList()
 		{
 			return new List<PlantDto>
 			{
@@ -34,16 +30,9 @@ namespace HomeHarvestTests.TestHelpers
 			};
 		}
 
-	public static CropDto GetCropWithSown(int id)
-		{
-			var crop = GetCrops().FirstOrDefault(x => x.Id == id);
 
-			crop.Sowed = GetSownWithPlants();
-		
-			return crop;
-		}
 
-		public static List<CropDto> GetCrops()
+		public static List<CropDto> CropDtoList()
 		{
 			return new List<CropDto>
 			{
@@ -66,17 +55,8 @@ namespace HomeHarvestTests.TestHelpers
 			};
 		}
 
-		public static List<SownDto> GetSownWithPlants()
-		{
-			var plants = GetPlants();
-			var sown = GetSown();
-			foreach (var s in sown)
-			{
-				s.Plant = plants.SingleOrDefault(x => x.Id == s.Id);
-			}
-			return sown;
-		}
-		public static List<SownDto> GetSown()
+
+		public static List<SownDto> SownDtoList()
 		{
 			return new List<SownDto>()
 			{
