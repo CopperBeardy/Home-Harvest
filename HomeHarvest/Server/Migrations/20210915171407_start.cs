@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace HomeHarvest.Server.Migrations
 {
+    [ExcludeFromCodeCoverage]
     public partial class start : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -2,7 +2,7 @@
 
 namespace HomeHarvest.Client.Services
 {
-	public class SownManager : APIRepository<SownDto>
+	public class SownManager : APIManager<SownDto>
 	{
 		public SownManager(HttpClient client) : base(client, "Sown")
 		{

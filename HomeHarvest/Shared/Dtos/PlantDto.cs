@@ -1,9 +1,11 @@
 ﻿using HomeHarvest.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace HomeHarvest.Shared.Dtos
 {
+    [ExcludeFromCodeCoverage]
     public class PlantDto : BaseDto
     {
         [JsonInclude]

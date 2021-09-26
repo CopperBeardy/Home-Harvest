@@ -11,10 +11,12 @@ namespace HomeHarvest.Server.Entities
         /// </summary>
         [Required(ErrorMessage = "You must enter a year for the crop being sowed")]
         public int Year { get; set; }
+        [Required]
         public string Location { get; set; }
         /// <summary>
         /// Image name of the plot for the current crop
         /// </summary>
+        [Required]
         public string PlotImage { get; set; }
         /// <summary>
         /// Collection of plants that were planted in the crop year

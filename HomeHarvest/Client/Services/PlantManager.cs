@@ -2,7 +2,7 @@
 
 namespace HomeHarvest.Client.Services
 {
-    public class PlantManager : APIRepository<PlantDto>
+    public class PlantManager : APIManager<PlantDto>
     {
         public PlantManager(HttpClient client) : base(client, "Plant")
         {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace HomeHarvest.Client.Services
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IManager<TEntity> where TEntity : class
     {
         Task<bool> Delete(int id);
         Task<IEnumerable<TEntity>> GetAll();

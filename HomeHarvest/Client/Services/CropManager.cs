@@ -3,12 +3,12 @@ using System.Net.Http;
 
 namespace HomeHarvest.Client.Services
 {
-    public class CropManager : APIRepository<CropDto>
+    public class CropManager : APIManager<CropDto>
     {
         public CropManager(HttpClient client) : base(client, "Crop")
         {
         }
         public static string DownloadPlotImage(string name) =>
-            $"http://127.0.0.1:10000/upload-container/{name}";
+            $"https://homeharveststorage.blob.core.windows.net/upload-container/{name}";
     }
 }
