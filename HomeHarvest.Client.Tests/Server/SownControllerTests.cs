@@ -1,10 +1,12 @@
 ﻿using FluentAssertions;
 using HomeHarvest.Server.Controllers;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
+using HomeHarvest.Shared.Enums;
 using HomeHarvestTests.TestHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -15,44 +17,42 @@ using Xunit;
 namespace HomeHarvestTests.Server
 {
 	[ExcludeFromCodeCoverage]
-	public  class SownControllerTests
+	public class SownControllerTests
 	{
 
 		[Fact]
-		public async Task GetAll_return_List_sowndtos()
+		public async Task GetAll_return_List_Sowns()
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<SownController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new SownController(context, loggerMock.Object, mapper);
-
+			var sut = new SownController(context, loggerMock.Object);
+			var expected = SownWithoutPlants(); 
 			// Act
 			var result = await sut.GetAll();
 
 			// Assert
-			result.Should().BeOfType<ActionResult<IEnumerable<SownDto>>>();
-			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(TestData.SownDtoList());
+			result.Should().BeOfType<ActionResult<IEnumerable<Sown>>>();
+			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected);
 		}
 
 		[Theory]
 		[InlineData(1)]
 		[InlineData(2)]
-		public async Task Get_with_valid_id_returns_sowndto(int id)
+		public async Task Get_with_valid_id_returns_Sown(int id)
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<SownController>>();
-			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new SownController(context, loggerMock.Object, mapper);
-			var expected = GetSownWithPlants();
+			var context = ContextDouble.CreateDbContext();		
+			var sut = new SownController(context, loggerMock.Object);
+			var expected = SownWithPlants().SingleOrDefault(x => x.Id == id);
 
 			// Act
 			var result = await sut.Get(id);
 
 			// Assert
-			result.Should().BeOfType<ActionResult<SownDto>>();
-			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected[id-1]);
+			result.Should().BeOfType<ActionResult<Sown>>();
+			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected);
 		}
 
 		[Fact]
@@ -61,23 +61,77 @@ namespace HomeHarvestTests.Server
 			//Arrange
 			var loggerMock = new Mock<ILogger<SownController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new SownController(context, loggerMock.Object, mapper);
+		
+			var sut = new SownController(context, loggerMock.Object);
 			// Act
 			var result = await sut.Get(3);
 			// Assert
 			result.Result.Should().BeOfType<NotFoundResult>();
 		}
 
-		public static List<SownDto> GetSownWithPlants()
+
+		public static List<Sown> SownWithoutPlants()
 		{
-			var plants = TestData.PlantDtoList();
-			var sown = TestData.SownDtoList();
-			foreach (var s in sown)
+			return new List<Sown>()
 			{
-				s.Plant = plants.SingleOrDefault(x => x.Id == s.Id);
-			}
-			return sown;
+				new Sown
+				{
+					CropId =1,
+					Id =1,
+					PlantId= 1,
+					PlantedOn = DateTime.Today.AddDays(-2),
+					PoiX = 23,
+					PoiY = 23,
+				},
+				new Sown
+				{
+					CropId = 1,
+					Id = 2,
+					PlantId = 2,
+					PlantedOn = DateTime.Today,
+					PoiX = 26,
+					PoiY = 26,
+				}
+			};
+		}
+
+		public static List<Sown> SownWithPlants()
+		{
+			return new List<Sown>()
+			{
+				new Sown
+				{
+					CropId =1,
+					Id =1,
+					PlantId= 1,
+					Plant = new Plant()
+					{
+						Genus = Genus.Flower,
+						GrowInWeeks = 5,
+						Id = 1,
+						Name = "Flower 1"
+					},
+					PlantedOn = DateTime.Today.AddDays(-2),
+					PoiX = 23,
+					PoiY = 23,
+				},
+				new Sown
+				{
+					CropId = 1,
+					Id = 2,
+					PlantId = 2,
+					Plant = new Plant()
+					{
+						Genus = Genus.Vegetable,
+						GrowInWeeks = 21,
+						Id = 2,
+						Name = "Vegetable 1"
+					},
+					PlantedOn = DateTime.Today,
+					PoiX = 26,
+					PoiY = 26,
+				}
+			};
 		}
 	}
 }

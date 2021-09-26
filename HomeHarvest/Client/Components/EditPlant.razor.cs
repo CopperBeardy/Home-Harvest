@@ -1,7 +1,7 @@
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using HomeHarvest.Client.Services;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
@@ -14,7 +14,7 @@ namespace HomeHarvest.Client.Components
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
         [Parameter]
-        public PlantDto Plant { get; set; }
+        public Plant Plant { get; set; }
         async Task Cancel() => await ModalInstance.CancelAsync();
 
         public async Task HandleValidSubmit()

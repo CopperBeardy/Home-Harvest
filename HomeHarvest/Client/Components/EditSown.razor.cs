@@ -1,7 +1,7 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
 using HomeHarvest.Client.Services;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
@@ -16,9 +16,9 @@ namespace HomeHarvest.Client.Components
         [CascadingParameter]
         BlazoredModalInstance ModalInstance { get; set; }
         [Parameter]
-        public SownDto Sown { get; set; }
+        public Sown Sown { get; set; }
 
-        public IEnumerable<PlantDto> Plants { get; set; } = new List<PlantDto>();
+        public IEnumerable<Plant> Plants { get; set; } = new List<Plant>();
 
         protected override async Task OnInitializedAsync()
         {

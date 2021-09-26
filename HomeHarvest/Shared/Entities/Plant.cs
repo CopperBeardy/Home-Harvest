@@ -1,7 +1,8 @@
 ﻿using HomeHarvest.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
+using HomeHarvest.Server.Entities;
 
-namespace HomeHarvest.Server.Entities
+namespace HomeHarvest.Shared.Entities
 {
     public class Plant : BaseEntity
     {

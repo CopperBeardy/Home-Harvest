@@ -2,7 +2,7 @@ using Blazored.Modal;
 using Blazored.Modal.Services;
 using HomeHarvest.Client.Components;
 using HomeHarvest.Client.Services;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace HomeHarvest.Client.Pages
 		public IModalService Modal { get; set; }
 		[Inject]
 		PlantManager PlantManager { get; set; }
-		IEnumerable<PlantDto> AllPlants { get; set; } = new List<PlantDto>();
+		IEnumerable<Plant> AllPlants { get; set; } = new List<Plant>();
 
 		protected override async Task OnInitializedAsync() => await LoadData();
 
@@ -34,7 +34,7 @@ namespace HomeHarvest.Client.Pages
 			}
 		}
 
-		public async void ShowEditPlantModal(PlantDto plant)
+		public async void ShowEditPlantModal(Plant plant)
 		{
 			var parameters = new ModalParameters();
 			parameters.Add("Plant", plant);

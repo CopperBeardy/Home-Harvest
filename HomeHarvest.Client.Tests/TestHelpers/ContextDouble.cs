@@ -1,6 +1,6 @@
 ﻿using Duende.IdentityServer.EntityFramework.Options;
 using HomeHarvest.Server.Data;
-using HomeHarvest.Server.Entities;
+using HomeHarvest.Shared.Entities;
 using HomeHarvest.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

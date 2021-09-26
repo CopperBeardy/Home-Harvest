@@ -2,14 +2,14 @@ using Blazored.Modal;
 using Blazored.Modal.Services;
 using HomeHarvest.Client.Components;
 using HomeHarvest.Client.Services;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Threading.Tasks;
 
 namespace HomeHarvest.Client.Pages
 {
-    public partial class Sown
+    public partial class Sows
     {
         [Inject]
         CropManager CropManager { get; set; }
@@ -20,11 +20,11 @@ namespace HomeHarvest.Client.Pages
         [CascadingParameter]
         public IModalService Modal { get; set; }
 
-        public CropDto Crop { get; set; }
+        public Crop Crop { get; set; }
         public string ImgSrc { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            Crop = new CropDto() { Sowed = new List<SownDto>() };
+            Crop = new Crop() { Sowed = new List<Sown>() };
             await LoadData();
         }
 
@@ -33,7 +33,7 @@ namespace HomeHarvest.Client.Pages
             // use offsets as location of click on the image to
             // drop a pin
             var parameters = new ModalParameters();
-            parameters.Add("Sown", new SownDto()
+            parameters.Add("Sown", new Sown()
             {
                 CropId = Crop.Id,
                 PoiX = int.Parse(args.OffsetX.ToString()),
@@ -56,7 +56,7 @@ namespace HomeHarvest.Client.Pages
             await InvokeAsync(StateHasChanged);
         }
 
-        async Task RemoveSown(SownDto sown)
+        async Task RemoveSown(Sown sown)
         {
             var result = await Modal.Show<RemoveConfirmation>(
              $"Remove {sown.Plant.Name}, {sown.PlantedOn.ToShortDateString()}").Result;
@@ -66,7 +66,7 @@ namespace HomeHarvest.Client.Pages
                 await LoadData();
             }
         }
-        async Task EditSownItem(SownDto sown)
+        async Task EditSownItem(Sown sown)
         {
             var parameters = new ModalParameters();
             parameters.Add("Sown", sown);

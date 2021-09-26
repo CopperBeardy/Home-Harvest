@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using HomeHarvest.Server.Entities;
 
-namespace HomeHarvest.Server.Entities
+namespace HomeHarvest.Shared.Entities
 {
     public class Crop : BaseEntity
     {
@@ -16,11 +18,15 @@ namespace HomeHarvest.Server.Entities
         /// <summary>
         /// Image name of the plot for the current crop
         /// </summary>
-        [Required]
+                [Required]
         public string PlotImage { get; set; }
+        [NotMapped]
+        public string LocationYear => $"{Location}, {Year}";
+        [NotMapped]
+        public byte[] Image { get; set; }
         /// <summary>
         /// Collection of plants that were planted in the crop year
-        /// </summary>	
+        /// </summary>
         public virtual ICollection<Sown> Sowed { get; set; }
     }
 }

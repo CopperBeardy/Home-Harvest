@@ -1,61 +1,58 @@
-﻿using AutoMapper;
+﻿
 using HomeHarvest.Server.Data;
-using HomeHarvest.Server.Entities;
 using HomeHarvest.Server.Services;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+
 
 namespace HomeHarvest.Server.Controllers
 {
 	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
-	public class CropController : BaseController<Crop, CropDto>
+	public class CropController : BaseController<Crop>
 	{
 		private readonly IBlobService _blobService;
 
-		public CropController(ApplicationDbContext context, ILogger<CropController> logger, IMapper mapper, IBlobService blobService)
-			: base(context, logger, mapper)
+		public CropController(ApplicationDbContext context, ILogger<CropController> logger, IBlobService blobService)
+			: base(context, logger)
 		{
 			_blobService = blobService;
 		}
 
 		[HttpGet("{id}")]
-		public override async Task<ActionResult<CropDto>> Get(int id)
+		public override async Task<ActionResult<Crop>> Get(int id)
 		{
 			if (EntityExists(id))
 			{
 				var crop = await _context.Crops
 					  .AsNoTracking()
-					  .Include(s => s.Sowed)
+					  .Include(s => s.Sowed.Where(x =>x.CropId == id))
 					  .ThenInclude(p => p.Plant)
 					  .FirstOrDefaultAsync(x => x.Id.Equals(id));
-				var mappedModel = _mapper.Map<CropDto>(crop);
-				return Ok(mappedModel);
+				return Ok(crop);
 			}
 			return NotFound();
 		}
 
 		[HttpPost]
-		public override async Task<ActionResult> Post(CropDto cropDto)
+		public override async Task<ActionResult> Post(Crop crop)
 		{
 			try
 			{
-				await _blobService.Upload(cropDto.Image, cropDto.PlotImage);
-				var crop = _mapper.Map<Crop>(cropDto);
+				await _blobService.Upload(crop.Image, crop.PlotImage);	
 				crop.Year = DateTime.Now.Year;
 				_context.Add(crop);
 				await _context.SaveChangesAsync();
-				_logger.LogInformation($"New {cropDto.GetType()} with Id {crop.Id} has been added to the Db ");
+				_logger.LogInformation($"New {crop.GetType()} with Id {crop.Id} has been added to the Db ");
 
 				return Ok();
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError($"Exception occured try to add {cropDto} to dataase: {ex}");
+				_logger.LogError($"Exception occured try to add {crop} to dataase: {ex}");
 				return BadRequest();
 			}
 		}

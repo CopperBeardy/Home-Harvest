@@ -1,11 +1,13 @@
 ﻿using FluentAssertions;
 using HomeHarvest.Server.Controllers;
 using HomeHarvest.Server.Services;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
+using HomeHarvest.Shared.Enums;
 using HomeHarvestTests.TestHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -16,67 +18,113 @@ using Xunit;
 namespace HomeHarvestTests.Server
 {
 	[ExcludeFromCodeCoverage]
-	public  class CropControllerTests
+	public class CropControllerTests
 	{
 
 		[Fact]
-		public async Task GetAll_without_sowed_list_returns_list_cropdtos()
+		public async Task GetAll_without_sowed_list_returns_list_crops()
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<CropController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
 			var blobServiceMock = new Mock<IBlobService>();
-			var sut = new CropController(context, loggerMock.Object, mapper, blobServiceMock.Object);
-
+			var sut = new CropController(context, loggerMock.Object, blobServiceMock.Object);
+			var expected = new List<Crop>() {
+				new Crop
+				{
+					Id = 1,
+					Location = "Home",
+					PlotImage = "Home.png",
+					Year = 2021
+				},
+				new Crop
+				{
+					Id = 2,
+					Location = "allotment",
+					PlotImage = "Allotment.png",
+					Year = 2021,
+				}
+			};
 			// Act
 			var result = await sut.GetAll();
 
 			// Assert
-			result.Should().BeOfType<ActionResult<IEnumerable<CropDto>>>();
-			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(TestData.CropDtoList());
+			result.Should().BeOfType<ActionResult<IEnumerable<Crop>>>();
+			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected);
 		}
 
-		[Fact]
-		public async Task Get_with_valid_id_returns_cropDto_with_sowed_list()
+		[Theory]
+		[InlineData(1)]
+		[InlineData(2)]
+		public async Task Get_with_valid_id_returns_crop(int id)
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<CropController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
 			var blobServiceMock = new Mock<IBlobService>();
-			var sut = new CropController(context, loggerMock.Object, mapper, blobServiceMock.Object);
-			var expected = GetCropWithSown(1);
+			var sut = new CropController(context, loggerMock.Object, blobServiceMock.Object);
+			var crops = new List<Crop>()
+			{
+				new Crop
+				{
+					Id = 1,
+					Location = "Home",
+					PlotImage = "Home.png",
+					Year = 2021,
+					Sowed = new List<Sown>()
+					{
+						new Sown
+						{
+							CropId = 1,
+							Id = 1,
+							PlantId = 1,
+							Plant = new Plant()
+							{
+								Genus = Genus.Flower,
+								GrowInWeeks = 5,
+								Id = 1,
+								Name = "Flower 1"
+							},
+							PlantedOn = DateTime.Today.AddDays(-2),
+							PoiX = 23,
+							PoiY = 23,
+						},
+						new Sown
+						{
+							CropId = 1,
+							Id = 2,
+							PlantId = 2,
+							Plant = new Plant()
+							{
+								Genus = Genus.Vegetable,
+								GrowInWeeks = 21,
+								Id = 2,
+								Name = "Vegetable 1"
+							},
+							PlantedOn = DateTime.Today,
+							PoiX = 26,
+							PoiY = 26,
+						},
+					}
+				},
+				new Crop
+				{
+					Id = 2,
+					Location = "allotment",
+					PlotImage = "Allotment.png",
+					Year = 2021,
+					Sowed = new List<Sown>()
+				}
+			};
+			var expected = crops.SingleOrDefault(x => x.Id == id);
 
 			// Act
-			var result = await sut.Get(1);
+			var result = await sut.Get(id);
 			var actual = result.Result.As<OkObjectResult>().Value;
-			// Assert	
-			actual.Should().BeOfType<CropDto>();
-			actual.Should().BeEquivalentTo(expected);
-			//Assert.IsType<CropDto>(actual);
-			//Assert.Equal(expected.Id, actual.Id);
-		}
 
-		[Fact]
-		public async Task Get_with_valid_id_returns_cropDto_without_sowed_list()
-		{
-			//Arrange
-			var loggerMock = new Mock<ILogger<CropController>>();
-			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var blobServiceMock = new Mock<IBlobService>();
-			var sut = new CropController(context, loggerMock.Object, mapper, blobServiceMock.Object);
-			var expected = TestData.CropDtoList().SingleOrDefault(x => x.Id == 2);
-
-			// Act
-			var result = await sut.Get(2);
-			var actual = result.Result.As<OkObjectResult>().Value;
-			// Assert	
-			actual.Should().BeOfType<CropDto>();
+			// Assert
+			actual.Should().BeOfType<Crop>();
 			actual.Should().BeEquivalentTo(expected);
-			//Assert.IsType<CropDto>(actual);
-			//Assert.Equal(expected.Id, actual.Id);
 		}
 
 		[Fact]
@@ -85,9 +133,8 @@ namespace HomeHarvestTests.Server
 			//Arrange
 			var loggerMock = new Mock<ILogger<CropController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
 			var blobServiceMock = new Mock<IBlobService>();
-			var sut = new CropController(context, loggerMock.Object, mapper, blobServiceMock.Object);
+			var sut = new CropController(context, loggerMock.Object, blobServiceMock.Object);
 			// Act
 			var result = await sut.Get(3);
 			// Assert
@@ -95,19 +142,18 @@ namespace HomeHarvestTests.Server
 		}
 
 		[Fact]
-		public async Task Post_with_cropdto_returns_ok_result()
+		public async Task Post_with_crop_returns_ok_result()
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<CropController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
 			var blobServiceMock = new Mock<IBlobService>();
-			var sut = new CropController(context, loggerMock.Object, mapper, blobServiceMock.Object);
-			var crop = new CropDto()
-			{ 
-				 Image = new byte[] {  1, 2, 3 },
+			var sut = new CropController(context, loggerMock.Object, blobServiceMock.Object);
+			var crop = new Crop()
+			{
+				Image = new byte[] { 1, 2, 3 },
 				Location = "Insert 1",
-				PlotImage= "Insert.png",
+				PlotImage = "Insert.png",
 				Year = 2022
 			};
 
@@ -118,42 +164,21 @@ namespace HomeHarvestTests.Server
 		}
 
 		[Fact]
-		public async Task Post_with_invalid_cropdto_reuturns_badrequest_result()
+		public async Task Post_with_invalid_crop_reuturns_badrequest_result()
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<CropController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
 			var blobServiceMock = new Mock<IBlobService>();
-			var sut = new CropController(context, loggerMock.Object, mapper, blobServiceMock.Object);
+			var sut = new CropController(context, loggerMock.Object, blobServiceMock.Object);
 			sut.ModelState.AddModelError("no image", "no imagr provide for testing");
 
 			//Act
-			var result = await sut.Post(new CropDto());
+			var result = await sut.Post(new Crop());
 
 			//Assert
 			result.Should().BeOfType<BadRequestResult>();
 		}
 
-		public static CropDto GetCropWithSown(int id)
-		{
-			var crop = TestData.CropDtoList().FirstOrDefault(x => x.Id == id);
-
-			crop.Sowed = GetSownWithPlants(crop);
-
-			return crop;
-		}
-
-		public static List<SownDto> GetSownWithPlants(CropDto crop)
-		{
-			var plants = TestData.PlantDtoList();
-			var sown = TestData.SownDtoList();
-			foreach (var s in sown)
-			{
-				s.Plant = plants.SingleOrDefault(x => x.Id == s.Id);
-				s.Crop = crop;
-			}
-			return sown;
-		}
 	}
 }

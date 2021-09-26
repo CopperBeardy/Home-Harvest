@@ -42,8 +42,9 @@ namespace HomeHarvest.Client.Services
                 var response = JsonConvert.DeserializeObject<TEntity>(responseBody);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                
                 return null;
             }
         }
@@ -58,8 +59,9 @@ namespace HomeHarvest.Client.Services
                 var response = JsonConvert.DeserializeObject<TEntity>(responseBody);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var x = ex.Message;
                 //todo handle exception
                 return null;
             }

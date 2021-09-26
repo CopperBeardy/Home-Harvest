@@ -44,7 +44,7 @@
 
 	[CascadingParameter]
 	BlazoredModalInstance ModalInstance { get; set; }
-	PlantDto Plant { get; set; } = new();
+	Plant Plant { get; set; } = new();
 
 	  async Task Cancel() => await ModalInstance.CancelAsync();
 	

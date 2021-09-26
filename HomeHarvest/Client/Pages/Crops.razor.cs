@@ -1,7 +1,7 @@
 using Blazored.Modal.Services;
 using HomeHarvest.Client.Components;
 using HomeHarvest.Client.Services;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,11 +16,11 @@ namespace HomeHarvest.Client.Pages
         NavigationManager NavigationManager { get; set; }
         [Inject]
         CropManager CropManager { get; set; }
-        IEnumerable<CropDto> CropItems { get; set; } = new List<CropDto>();
+        IEnumerable<Crop> CropItems { get; set; } = new List<Crop>();
 
         protected override async Task OnInitializedAsync() => await LoadData();
 
-        void NavigateToSown(int id) => NavigationManager.NavigateTo($"Sown/{id}");
+        void NavigateToSown(int id) => NavigationManager.NavigateTo($"Sows/{id}");
 
 
 

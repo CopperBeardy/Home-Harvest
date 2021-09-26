@@ -163,86 +163,6 @@ namespace HomeHarvest.Server.Migrations
                     b.ToTable("PersistedGrants", (string)null);
                 });
 
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Crop", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PlotImage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Crops");
-                });
-
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Plant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Genus")
-                        .HasColumnType("int");
-
-                    b.Property<double>("GrowInWeeks")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Plants");
-                });
-
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Sown", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CropId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlantId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PlantedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("PoiX")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PoiY")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CropId");
-
-                    b.HasIndex("PlantId");
-
-                    b.ToTable("Sowns");
-                });
-
             modelBuilder.Entity("HomeHarvest.Server.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -306,6 +226,86 @@ namespace HomeHarvest.Server.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("HomeHarvest.Shared.Entities.Crop", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlotImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Crops");
+                });
+
+            modelBuilder.Entity("HomeHarvest.Shared.Entities.Plant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Genus")
+                        .HasColumnType("int");
+
+                    b.Property<double>("GrowInWeeks")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Plants");
+                });
+
+            modelBuilder.Entity("HomeHarvest.Shared.Entities.Sown", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CropId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PlantedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("PoiX")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PoiY")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CropId");
+
+                    b.HasIndex("PlantId");
+
+                    b.ToTable("Sowns");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -445,21 +445,19 @@ namespace HomeHarvest.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Sown", b =>
+            modelBuilder.Entity("HomeHarvest.Shared.Entities.Sown", b =>
                 {
-                    b.HasOne("HomeHarvest.Server.Entities.Crop", "Crop")
+                    b.HasOne("HomeHarvest.Shared.Entities.Crop", null)
                         .WithMany("Sowed")
                         .HasForeignKey("CropId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HomeHarvest.Server.Entities.Plant", "Plant")
+                    b.HasOne("HomeHarvest.Shared.Entities.Plant", "Plant")
                         .WithMany()
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Crop");
 
                     b.Navigation("Plant");
                 });
@@ -515,7 +513,7 @@ namespace HomeHarvest.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HomeHarvest.Server.Entities.Crop", b =>
+            modelBuilder.Entity("HomeHarvest.Shared.Entities.Crop", b =>
                 {
                     b.Navigation("Sowed");
                 });

@@ -14,9 +14,9 @@ namespace HomeHarvestTests.Client.ServicesTests
 		//	var handler = new Mock<HttpMessageHandler>();
 		//	var client = handler.CreateClient();
 		//	var manager = new PlantManager(client);
-		//	var plant = Mock.Of<PlantDto>();
+		//	var plant = Mock.Of<Plant>();
 		//	plant.Id = 1;
-		//	// plant = new PlantDto()
+		//	// plant = new Plant()
 		//	//{
 		//	//	Id = 1,
 		//	//	GrowInWeeks = 10,
@@ -29,7 +29,7 @@ namespace HomeHarvestTests.Client.ServicesTests
 
 
 		//	var result =await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, $"{url}plant"));
-		//	var actual = JsonConvert.DeserializeObject<PlantDto>(await result.Content.ReadAsStringAsync());
+		//	var actual = JsonConvert.DeserializeObject<Plant>(await result.Content.ReadAsStringAsync());
 
 
 		//	Assert.Equal(1, actual.Id);

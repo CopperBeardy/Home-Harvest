@@ -21,7 +21,6 @@ builder.Services.AddCors(policy =>
 	.WithExposedHeaders("X-Pagination"));
 });
 builder.Services.Configure<BlobContainerConnection>(builder.Configuration.GetSection(nameof(BlobContainerConnection)));
-builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IBlobService, BlobService>();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)

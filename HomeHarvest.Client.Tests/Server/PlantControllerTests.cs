@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using HomeHarvest.Server.Controllers;
-using HomeHarvest.Shared.Dtos;
+using HomeHarvest.Shared.Entities;
 using HomeHarvest.Shared.Enums;
 using HomeHarvestTests.TestHelpers;
 using Microsoft.AspNetCore.Mvc;
@@ -20,20 +20,19 @@ namespace HomeHarvestTests.Server
 	{
 
 		[Fact]
-		public async Task GetAll_reutrns_list_cropdtos()
+		public async Task GetAll_reutrns_list_plants()
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
-			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new PlantController(context,loggerMock.Object, mapper);
-			var expected = TestData.PlantDtoList();
+			var context = ContextDouble.CreateDbContext();	
+			var sut = new PlantController(context,loggerMock.Object);
+			var expected = Plants();
 
 			// Act
 			var result = await sut.GetAll();
 
 			// Assert
-			result.Should().BeOfType<ActionResult<IEnumerable<PlantDto>>>();
+			result.Should().BeOfType<ActionResult<IEnumerable<Plant>>>();
 			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected);
 
 		}
@@ -45,17 +44,16 @@ namespace HomeHarvestTests.Server
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
-			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new PlantController(context, loggerMock.Object, mapper);
-			var expected = TestData.PlantDtoList();
+			var context = ContextDouble.CreateDbContext();	
+			var sut = new PlantController(context, loggerMock.Object);
+			var expected = Plants().SingleOrDefault(x => x.Id == id);
 
 			// Act
 			var result = await sut.Get(id);
 
 			// Assert
-			result.Should().BeOfType<ActionResult<PlantDto>>();
-			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected[id-1]);
+			result.Should().BeOfType<ActionResult<Plant>>();
+			result.Result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected);
 
 		}
 
@@ -65,8 +63,8 @@ namespace HomeHarvestTests.Server
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-		var sut = new PlantController(context, loggerMock.Object, mapper);
+	
+			var sut = new PlantController(context, loggerMock.Object);
 
 			// Act
 			var result = await sut.Get(3);
@@ -80,9 +78,9 @@ namespace HomeHarvestTests.Server
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new PlantController(context, loggerMock.Object, mapper);
-			var plant = new PlantDto()
+			
+			var sut = new PlantController(context, loggerMock.Object);
+			var plant = new Plant()
 			{
 				Genus = Genus.Tree,
 				GrowInWeeks = 12,
@@ -102,10 +100,9 @@ namespace HomeHarvestTests.Server
 		{
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
-			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new PlantController(context, loggerMock.Object, mapper);
-			var plant = new PlantDto();
+			var context = ContextDouble.CreateDbContext();	
+			var sut = new PlantController(context, loggerMock.Object);
+			var plant = new Plant();
 
 			//act
 			var result = await sut.Post(plant);
@@ -121,10 +118,9 @@ namespace HomeHarvestTests.Server
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new PlantController(context, loggerMock.Object, mapper);
-			var plants = TestData.PlantDtoList();
-			var plant = plants[0];
+		
+			var sut = new PlantController(context, loggerMock.Object);
+			var plant = Plants().First();		
 			plant.Genus = Genus.Other;
 			plant.Name = "Cactus";
 
@@ -145,11 +141,10 @@ namespace HomeHarvestTests.Server
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new PlantController(context, loggerMock.Object, mapper);
+			var sut = new PlantController(context, loggerMock.Object);
 
 			//act
-			var result = await sut.Put(new PlantDto());
+			var result = await sut.Put(new Plant());
 
 			//assert
 			result.Should().BeOfType<BadRequestResult>();
@@ -162,8 +157,7 @@ namespace HomeHarvestTests.Server
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new PlantController(context, loggerMock.Object, mapper);
+			var sut = new PlantController(context, loggerMock.Object);
 
 			//act
 			var result = await sut.Delete(1);
@@ -179,17 +173,35 @@ namespace HomeHarvestTests.Server
 			//Arrange
 			var loggerMock = new Mock<ILogger<PlantController>>();
 			var context = ContextDouble.CreateDbContext();
-			var mapper = MapperDouble.CreateMapper();
-			var sut = new PlantController(context, loggerMock.Object, mapper);
+			var sut = new PlantController(context, loggerMock.Object);
 
 			//act
 			var result = await sut.Delete(3);
 
-			//
-
+			//Assert
 			result.Should().BeOfType<NotFoundObjectResult>();
 			context.Plants.Should().HaveCount(2);
 		}
 
+		public static List<Plant> Plants()
+		{
+			return new List<Plant>
+			{
+				new Plant
+				{
+					Genus = Genus.Flower,
+					GrowInWeeks = 5,
+					Id = 1,
+					Name = "Flower 1"
+				},
+				new Plant
+				{
+					Genus = Genus.Vegetable,
+					GrowInWeeks = 21,
+					Id = 2,
+					Name = "Vegetable 1"
+				}
+			};
+		}
 	}
 }

@@ -1,9 +1,10 @@
-﻿using HomeHarvest.Shared.Dtos;
+﻿
+using HomeHarvest.Shared.Entities;
 using System.Net.Http;
 
 namespace HomeHarvest.Client.Services
 {
-    public class CropManager : APIManager<CropDto>
+    public class CropManager : APIManager<Crop>
     {
         public CropManager(HttpClient client) : base(client, "Crop")
         {

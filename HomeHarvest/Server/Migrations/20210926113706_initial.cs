@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace HomeHarvest.Server.Migrations
 {
-    [ExcludeFromCodeCoverage]
-    public partial class start : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,8 +55,8 @@ namespace HomeHarvest.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Year = table.Column<int>(type: "int", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PlotImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlotImage = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
