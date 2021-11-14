@@ -34,8 +34,8 @@ public abstract class BaseController<T> : ControllerBase where T : BaseEntity
 	[HttpGet("{id}")]
 	public virtual async Task<ActionResult<T>> Get(int id)
 	{
-
-		var entity = await _context.Set<T>()
+	
+	var entity = await _context.Set<T>()
 			.AsNoTracking()
 			.SingleOrDefaultAsync(x => x.Id == id);
 

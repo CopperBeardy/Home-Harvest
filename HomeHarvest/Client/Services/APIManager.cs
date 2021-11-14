@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Flurl;
+using Flurl.Http;
 
 namespace HomeHarvest.Client.Services
 {
@@ -11,10 +13,12 @@ namespace HomeHarvest.Client.Services
         private readonly HttpClient _httpClient;
         readonly string _url;
 
+
         public APIManager(HttpClient client, string controller)
         {
             _httpClient = client;
             _url = $"api/{controller}";
+            //URL = $"https://localhost:5003/{_url}";
         }
         public async Task<IEnumerable<TEntity>> GetAll()
         {
@@ -26,7 +30,7 @@ namespace HomeHarvest.Client.Services
                 var response = JsonConvert.DeserializeObject<IEnumerable<TEntity>>(responseBody);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null ;
             }
@@ -44,7 +48,7 @@ namespace HomeHarvest.Client.Services
             }
             catch (Exception ex)
             {
-                
+
                 return null;
             }
         }
